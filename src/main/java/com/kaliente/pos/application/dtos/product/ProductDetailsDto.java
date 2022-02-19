@@ -2,11 +2,13 @@ package com.kaliente.pos.application.dtos.product;
 
 import java.util.UUID;
 
+
 public class ProductDetailsDto {
 	private UUID id;
 	private String title;
 	private String description;
 	private double price;
+	private ProductCatalogueDetailsDto catalogue;
 	
 	public UUID getId() {
 		return id;
@@ -31,5 +33,11 @@ public class ProductDetailsDto {
 	}
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public ProductCatalogueDetailsDto getCatalogue() {
+		return catalogue;
+	}
+	public void setCatalogue(ProductCatalogueDetailsDto catalogue) {
+		this.catalogue = catalogue;
 	}
 }

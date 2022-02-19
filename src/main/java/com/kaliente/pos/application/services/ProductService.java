@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.kaliente.pos.application.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.domain.productaggregate.Product;
+import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 import com.kaliente.pos.domain.productaggregate.ProductRepository;
 
 @Service
@@ -38,6 +39,7 @@ public class ProductService {
 	
 	public Product createNewProduct(ProductDetailsDto dto) {
 		Product newProduct = modelMapper.map(dto, Product.class);
+		System.out.println(newProduct.toString());
 		return this.productRepository.save(newProduct);
 	}
 	
