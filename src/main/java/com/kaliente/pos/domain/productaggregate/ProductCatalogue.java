@@ -20,18 +20,20 @@ public class ProductCatalogue extends BaseEntity {
 	private String title;
 	private String description;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="catalogue")
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy="catalogue")
 	private List<Product> products = new ArrayList<Product>();
 	
-	private ProductCatalogue() {}
+	private ProductCatalogue() {
+		products.forEach(p -> p.setCatalogue(this));
+	}
 	
 
 	
-//	@ManyToOne(fetch=FetchType.LAZY, optional = true)
-//	private ProductCatalogue parentCatalogue;
-//	
-//	@OneToMany(mappedBy="parentCatalogue")
-//	private List<ProductCatalogue> subcatalogues = new ArrayList<>();
+	@ManyToOne(fetch=FetchType.LAZY, optional = true)
+	private ProductCatalogue parentCatalogue;
+	
+	@OneToMany(mappedBy="parentCatalogue")
+	private List<ProductCatalogue> subcatalogues = new ArrayList<>();
 
 
 	public String getTitle() {
@@ -50,14 +52,14 @@ public class ProductCatalogue extends BaseEntity {
 		this.description = description;
 	}
 
-//	public ProductCatalogue getParentCatalogue() {
-//		return parentCatalogue;
-//	}
-//
-//	public void setParentCatalogue(ProductCatalogue parentCatalogue) {
-//		this.parentCatalogue = parentCatalogue;
-//	}
-//
+	public ProductCatalogue getParentCatalogue() {
+		return parentCatalogue;
+	}
+
+	public void setParentCatalogue(ProductCatalogue parentCatalogue) {
+		this.parentCatalogue = parentCatalogue;
+	}
+
 //	public Set<ProductCatalogue> getSubcatalogues() {
 //		return subcatalogues;
 //	}

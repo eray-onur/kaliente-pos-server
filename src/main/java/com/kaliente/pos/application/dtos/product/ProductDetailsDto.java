@@ -2,6 +2,8 @@ package com.kaliente.pos.application.dtos.product;
 
 import java.util.UUID;
 
+import com.kaliente.pos.application.dtos.productcatalogue.ProductCatalogueDetailsDto;
+
 
 public class ProductDetailsDto {
 	private UUID id;

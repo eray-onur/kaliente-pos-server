@@ -40,7 +40,7 @@ public class ProductService {
 	public Product createNewProduct(ProductDetailsDto dto) {
 		Product newProduct = modelMapper.map(dto, Product.class);
 		System.out.println(newProduct.toString());
-		return this.productRepository.save(newProduct);
+		return this.productRepository.saveAndFlush(newProduct);
 	}
 	
 	public Product updateProduct(ProductDetailsDto dto) {

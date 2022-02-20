@@ -1,9 +1,7 @@
 package com.kaliente.pos.domain.productaggregate;
 
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
