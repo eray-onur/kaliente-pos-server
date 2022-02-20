@@ -38,6 +38,15 @@ public class ProductCatalogueService {
 		
 		public ProductCatalogueDetailsDto createNewProductCatalogue(ProductCatalogueDetailsDto dto) {
 			ProductCatalogue newProductCatalogue = modelMapper.map(dto, ProductCatalogue.class);
+			
+			UUID parentCatalogueId = dto.getParentCatalogueId();
+			if(parentCatalogueId != null) {
+				Optional<ProductCatalogue> parent = catalogueRepository.findById(parentCatalogueId);
+				if(parent != null) {
+					newProductCatalogue.setParentCatalogue(parent.get());
+				}
+			}
+			
 			this.catalogueRepository.save(newProductCatalogue);
 			return dto;
 		}

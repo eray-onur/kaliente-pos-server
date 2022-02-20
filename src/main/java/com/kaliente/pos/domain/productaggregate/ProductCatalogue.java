@@ -23,12 +23,6 @@ public class ProductCatalogue extends BaseEntity {
 	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy="catalogue")
 	private List<Product> products = new ArrayList<Product>();
 	
-	private ProductCatalogue() {
-		products.forEach(p -> p.setCatalogue(this));
-	}
-	
-
-	
 	@ManyToOne(fetch=FetchType.LAZY, optional = true)
 	private ProductCatalogue parentCatalogue;
 	

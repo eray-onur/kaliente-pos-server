@@ -4,10 +4,12 @@ package com.kaliente.pos.domain.productaggregate;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
 @Entity
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements AggregateRoot {
 	
 	private String title;
 	private String description;

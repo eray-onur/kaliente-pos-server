@@ -8,9 +8,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kaliente.pos.application.dtos.product.ProductCreateDto;
 import com.kaliente.pos.application.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
+import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 import com.kaliente.pos.domain.productaggregate.ProductRepository;
 
 @Service
@@ -18,6 +20,8 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
+	@Autowired
+	private ProductCatalogueRepository productCatalogueRepository;
 	
 
     @Autowired
@@ -37,21 +41,21 @@ public class ProductService {
 		return products.stream().map(p -> modelMapper.map(p, ProductDetailsDto.class)).toList();
 	}
 	
-	public Product createNewProduct(ProductDetailsDto dto) {
+	public Product createNewProduct(ProductCreateDto dto) {
 		Product newProduct = modelMapper.map(dto, Product.class);
-		System.out.println(newProduct.toString());
-		return this.productRepository.saveAndFlush(newProduct);
+		
+		UUID catalogueId = dto.getCatalogueId();
+		if(catalogueId != null) {
+			ProductCatalogue catalogue = productCatalogueRepository.getById(catalogueId);
+			newProduct.setCatalogue(catalogue);
+		}
+		
+		return this.productRepository.save(newProduct);
 	}
 	
 	public Product updateProduct(ProductDetailsDto dto) {
-		Optional<Product> productToUpdate = this.productRepository.findById(dto.getId());
-		if(productToUpdate.isEmpty()) return null;
-		
-		productToUpdate.get().setTitle(dto.getTitle());
-		productToUpdate.get().setDescription(dto.getDescription());
-		productToUpdate.get().setPrice(dto.getPrice());
-		
-		return this.productRepository.save(productToUpdate.get());
+		Product productToUpdate = modelMapper.map(dto, Product.class);
+		return this.productRepository.save(productToUpdate);
 	}
 	
 	public int deleteProduct(UUID productId) {

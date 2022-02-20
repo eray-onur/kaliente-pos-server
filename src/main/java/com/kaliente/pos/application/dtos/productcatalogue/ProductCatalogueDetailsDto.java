@@ -6,7 +6,7 @@ public class ProductCatalogueDetailsDto {
 	private UUID id;
 	private String title;
 	private String description;
-	private ProductCatalogueDetailsDto parentCatalogue;
+	private UUID parentCatalogueId;
 	
 	public UUID getId() {
 		return id;
@@ -26,13 +26,10 @@ public class ProductCatalogueDetailsDto {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public ProductCatalogueDetailsDto getParentCategory() {
-		return parentCatalogue;
+	public UUID getParentCatalogueId() {
+		return parentCatalogueId;
 	}
-	public void setParentCategory(ProductCatalogueDetailsDto parentCatalogue) {
-		this.parentCatalogue = parentCatalogue;
+	public void setParentCatalogueId(UUID parentCatalogueId) {
+		this.parentCatalogueId = parentCatalogueId;
 	}
-	
-	
-	
 }

@@ -40,20 +40,20 @@ public class ProductCatalogueController {
 		return new ResponseEntity<List<ProductCatalogueDetailsDto>>(productCatalogues, HttpStatus.OK);
 	}
 	
-	@PostMapping("/addNewProduct")
-	public ResponseEntity<?> addNewProduct(@RequestBody ProductCatalogueDetailsDto dto) {
+	@PostMapping("/addNewCatalogue")
+	public ResponseEntity<?> addNewCatalogue(@RequestBody ProductCatalogueDetailsDto dto) {
 		productCatalogueService.createNewProductCatalogue(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/updateProduct")
-	public ResponseEntity<?> updateProduct(@RequestBody ProductCatalogueDetailsDto dto) {
+	@PutMapping("/updateCatalogue")
+	public ResponseEntity<?> updateCatalogue(@RequestBody ProductCatalogueDetailsDto dto) {
 		this.productCatalogueService.updateProductCatalogue(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable("id") UUID id) {
+	public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
 		this.productCatalogueService.deleteProductCatalogue(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

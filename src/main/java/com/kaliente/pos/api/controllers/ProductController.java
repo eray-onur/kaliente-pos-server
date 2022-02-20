@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kaliente.pos.application.dtos.product.ProductCreateDto;
 import com.kaliente.pos.application.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.application.services.ProductService;
 
@@ -41,7 +42,7 @@ public class ProductController {
 	}
 	
 	@PostMapping("/addNewProduct")
-	public ResponseEntity<?> addNewProduct(@RequestBody ProductDetailsDto dto) {
+	public ResponseEntity<?> addNewProduct(@RequestBody ProductCreateDto dto) {
 		productService.createNewProduct(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
