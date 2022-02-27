@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import com.kaliente.pos.application.dtos.product.ProductCreateDto;
 import com.kaliente.pos.application.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.domain.productaggregate.Product;
-import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
-import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 import com.kaliente.pos.domain.productaggregate.ProductRepository;
 
 @Service
@@ -20,8 +18,6 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
-	@Autowired
-	private ProductCatalogueRepository productCatalogueRepository;
 	
 
     @Autowired
@@ -43,12 +39,7 @@ public class ProductService {
 	
 	public Product createNewProduct(ProductCreateDto dto) {
 		Product newProduct = modelMapper.map(dto, Product.class);
-		
-		UUID catalogueId = dto.getCatalogueId();
-		if(catalogueId != null) {
-			ProductCatalogue catalogue = productCatalogueRepository.getById(catalogueId);
-			newProduct.setCatalogue(catalogue);
-		}
+		newProduct.setCatalogue(newProduct.getCatalogue());
 		
 		return this.productRepository.save(newProduct);
 	}

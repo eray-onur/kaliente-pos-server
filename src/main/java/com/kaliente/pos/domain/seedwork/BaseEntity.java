@@ -1,19 +1,15 @@
 package com.kaliente.pos.domain.seedwork;
 
-import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
+// Persisted database entity.
 @MappedSuperclass
 public class BaseEntity {
 	

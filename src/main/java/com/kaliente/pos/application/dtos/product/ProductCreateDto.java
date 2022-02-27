@@ -9,7 +9,7 @@ public class ProductCreateDto {
 	private String title;
 	private String description;
 	private double price;
-	private UUID catalogueId;
+	private ProductCatalogueDetailsDto catalogue;
 	
 	public UUID getId() {
 		return id;
@@ -35,11 +35,13 @@ public class ProductCreateDto {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public UUID getCatalogueId() {
-		return catalogueId;
+	public ProductCatalogueDetailsDto getCatalogue() {
+		return catalogue;
 	}
-	public void setCatalogueId(UUID catalogueId) {
-		this.catalogueId = catalogueId;
+	public void setCatalogue(ProductCatalogueDetailsDto productCategoryDetails) {
+		this.catalogue = productCategoryDetails;
 	}
+	
+	
 	
 }

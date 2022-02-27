@@ -12,7 +12,7 @@ public class DtoMapper {
 	
 	public DtoMapper(ModelMapper mapper) {
 		mapper.createTypeMap(Product.class, ProductDetailsDto.class);
-		mapper.createTypeMap(ProductCatalogue.class, ProductCreateDto.class);
+		mapper.createTypeMap(Product.class, ProductCreateDto.class);
 		mapper.createTypeMap(ProductCatalogue.class, ProductCatalogueDetailsDto.class);
 	}
 	

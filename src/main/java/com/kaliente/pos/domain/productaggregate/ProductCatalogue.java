@@ -1,12 +1,7 @@
 package com.kaliente.pos.domain.productaggregate;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -20,7 +15,7 @@ public class ProductCatalogue extends BaseEntity {
 	private String title;
 	private String description;
 
-	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, mappedBy="catalogue")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="catalogue")
 	private List<Product> products = new ArrayList<Product>();
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = true)
@@ -54,11 +49,19 @@ public class ProductCatalogue extends BaseEntity {
 		this.parentCatalogue = parentCatalogue;
 	}
 
-//	public Set<ProductCatalogue> getSubcatalogues() {
-//		return subcatalogues;
-//	}
-//
-//	public void setSubcatalogues(Set<ProductCatalogue> subcatalogues) {
-//		this.subcatalogues = subcatalogues;
-//	}
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
+	public List<ProductCatalogue> getSubcatalogues() {
+		return subcatalogues;
+	}
+
+	public void setSubcatalogues(List<ProductCatalogue> subcatalogues) {
+		this.subcatalogues = subcatalogues;
+	}
 }

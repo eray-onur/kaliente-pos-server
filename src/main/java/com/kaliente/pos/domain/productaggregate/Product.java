@@ -1,6 +1,9 @@
 package com.kaliente.pos.domain.productaggregate;
 
 
+import java.util.ArrayList;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,7 +18,7 @@ public class Product extends BaseEntity implements AggregateRoot {
 	private String description;
 	private double price;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="catalogue_id", nullable = true)
 	private ProductCatalogue catalogue;
 
@@ -51,14 +54,5 @@ public class Product extends BaseEntity implements AggregateRoot {
 		this.catalogue = catalogue;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [title=" + title + ", description=" + description + ", price=" + price + ", catalogue="
-				+ catalogue.getTitle() + ", id=" + id + ", getTitle()=" + getTitle() + ", getDescription()=" + getDescription()
-				+ ", getPrice()=" + getPrice() + ", getCatalogue()=" + getCatalogue() + ", getId()=" + getId()
-				+ ", hashCode()=" + hashCode()
-				+ "]";
-	}
-	
 	
 }
