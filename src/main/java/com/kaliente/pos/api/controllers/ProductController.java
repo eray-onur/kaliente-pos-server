@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,8 @@ public class ProductController {
 	
 	@Autowired
 	private ProductService productService;
-	
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<ProductDetailsDto> getById(@PathVariable("id") UUID id) {
 		ProductDetailsDto product = this.productService.getProductById(id);
@@ -35,24 +37,30 @@ public class ProductController {
 		
 	}
 	
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getAll")
 	public ResponseEntity<List<ProductDetailsDto>> getAll() {
 		List<ProductDetailsDto> products = this.productService.getAll();
 		return new ResponseEntity<List<ProductDetailsDto>>(products, HttpStatus.OK);
 	}
 	
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PostMapping("/addNewProduct")
 	public ResponseEntity<?> addNewProduct(@RequestBody ProductCreateDto dto) {
 		productService.createNewProduct(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PutMapping("/updateProduct")
 	public ResponseEntity<?> updateProduct(@RequestBody ProductDetailsDto dto) {
 		this.productService.updateProduct(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
-	
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable("id") UUID id) {
 		this.productService.deleteProduct(id);

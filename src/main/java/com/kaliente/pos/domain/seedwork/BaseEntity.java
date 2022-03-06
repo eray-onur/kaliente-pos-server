@@ -22,6 +22,10 @@ public class BaseEntity {
     @Column(name = "id", updatable = false, nullable = false)
 	protected UUID id = UUID.randomUUID();
 	
+	public BaseEntity() {
+		setActive(true);
+	}
+	
 //	@Temporal(TemporalType.TIMESTAMP)
 //	protected Date createdOn;
 //	
@@ -32,8 +36,13 @@ public class BaseEntity {
 //	
 //	protected UUID lastModifiedBy;
 	
+	protected boolean isActive;
 	
 	
+	
+	
+	
+
 	public UUID getId() {
 		return id;
 	}
@@ -64,4 +73,10 @@ public class BaseEntity {
 //	public void setLastModifiedBy(UUID lastModifiedBy) {
 //		this.lastModifiedBy = lastModifiedBy;
 //	}
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 }

@@ -1,8 +1,6 @@
 package com.kaliente.pos.domain.productaggregate;
 
 
-import java.util.ArrayList;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

@@ -1,4 +1,4 @@
-package com.kaliente.pos.api.interceptors;
+package com.kaliente.pos.api.filters;
 
 import java.io.IOException;
 
@@ -30,21 +30,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		final String authHeader = request.getHeader("Authorization");
+		final String header = request.getHeader("Authorization");
 		
 		String username = null;
 		String jwt = null;
 		
-		if(authHeader != null && authHeader.startsWith("Bearer ")) {
-			jwt = authHeader.substring(7);
-			username = jwtUtil.extractUsername(jwt);
+		if(header != null && header.startsWith("Bearer ")) {
+			jwt = header.replace("Bearer ", "");
+			username = jwtUtil.getUsernameFromToken(jwt);
 		}
 		
 		if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = this.userDetailService.loadUserByUsername(username);
 			
 			if(jwtUtil.validateToken(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtUtil.getAuthentication(jwt, SecurityContextHolder.getContext().getAuthentication(), userDetails);
 				
 				usernamePasswordAuthenticationToken
 				.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

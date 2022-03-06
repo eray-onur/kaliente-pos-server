@@ -1,20 +1,15 @@
 package com.kaliente.pos.application.dtos.auth;
 
-public class AuthenticationRequestDto {
+public class RegisterRequestDto {
 	private String email;
 	private String username;
 	private String password;
 	
-	public AuthenticationRequestDto() {
-		
-	}
-	
-	public AuthenticationRequestDto(String email, String username, String password) {
+	public RegisterRequestDto(String email, String username, String password) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
 	}
-	
 	
 	public String getEmail() {
 		return email;
@@ -34,5 +29,6 @@ public class AuthenticationRequestDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 	
 }
