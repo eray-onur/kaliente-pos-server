@@ -1,6 +1,7 @@
 package com.kaliente.pos.api.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,7 +34,7 @@ public class AuthController {
 	
 
 	
-	@PostMapping("/authenticate")
+	@PostMapping(value = "/authenticate")
 	public ResponseEntity<AuthenticationResponseDto> authenticate(@RequestBody AuthenticationRequestDto requestDto) throws Exception {
 		final Authentication authentication = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
