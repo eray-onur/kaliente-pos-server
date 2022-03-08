@@ -49,7 +49,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 			.cors().and()
 			.authorizeRequests(authorizeRequests -> {
 				authorizeRequests
-		        .antMatchers("/auth/*").permitAll()
+		        .antMatchers("/auth/register", "/auth/authenticate").permitAll()
 		        .anyRequest().authenticated();
 				
 			})
@@ -71,7 +71,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public RoleHierarchy roleHierarchy() {
 	    RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-	    String hierarchy = "ROLE_ADMIN > ROLE_PERSONNEL";
+	    String hierarchy = "ROLE_SUPERADMIN > ROLE_ADMIN > ROLE_PERSONNEL";
 	    roleHierarchy.setHierarchy(hierarchy);
 	    return roleHierarchy;
 	}
@@ -82,11 +82,11 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	    return new BCryptPasswordEncoder();
 	}
 	
-//	@Bean
-//	public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
-//	    DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
-//	    expressionHandler.setRoleHierarchy(roleHierarchy());
-//	    return expressionHandler;
-//	}
+	@Bean
+	public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
+	    DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
+	    expressionHandler.setRoleHierarchy(roleHierarchy());
+	    return expressionHandler;
+	}
 
 }

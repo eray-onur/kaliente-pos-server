@@ -1,5 +1,6 @@
 package com.kaliente.pos;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -44,20 +45,41 @@ ApplicationListener<ContextRefreshedEvent> {
 //		Privilege readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
 //		Privilege writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
 //		
+//		List<Privilege> superadminPrivileges = Arrays.asList(
+//		          readPrivilege, writePrivilege);
+//		
 //		List<Privilege> adminPrivileges = Arrays.asList(
 //		          readPrivilege, writePrivilege);
 //		
+//		createRoleIfNotFound("ROLE_SUPERADMIN", superadminPrivileges);
 //		createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
 //		createRoleIfNotFound("ROLE_PERSONNEL", Arrays.asList(readPrivilege));
+//		
+//
+//		Role superAdminRole = roleRepository.findByTitle("ROLE_SUPERADMIN");
+//		
+//		ApplicationUser sa = new ApplicationUser();
+//		sa.setFirstName("Superadmin");
+//		sa.setLastName("Superadmin");
+//		sa.setPassword(passwordEncoder.encode("test"));
+//		sa.setEmail("Superadmin@Admin.com");
+//		sa.setRoles(Arrays.asList(superAdminRole));
+//		
+//
 //		Role adminRole = roleRepository.findByTitle("ROLE_ADMIN");
 //		
-//		ApplicationUser user = new ApplicationUser();
-//		user.setFirstName("Admin");
-//		user.setLastName("Admin");
-//		user.setPassword(passwordEncoder.encode("test"));
-//		user.setEmail("Admin@Admin.com");
-//		user.setRoles(Arrays.asList(adminRole));
-//		userRepository.save(user);
+//		ApplicationUser a = new ApplicationUser();
+//		a.setFirstName("Admin");
+//		a.setLastName("Admin");
+//		a.setPassword(passwordEncoder.encode("test"));
+//		a.setEmail("Admin@Admin.com");
+//		a.setRoles(Arrays.asList(adminRole));
+//		
+//		List<ApplicationUser> usersToAdd = new ArrayList<ApplicationUser>();
+//		usersToAdd.add(sa);
+//		usersToAdd.add(a);
+//		
+//		userRepository.saveAll(usersToAdd);
 //		alreadySetup = true;
 	}
 	

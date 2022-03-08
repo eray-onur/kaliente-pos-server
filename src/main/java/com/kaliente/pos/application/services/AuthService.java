@@ -1,16 +1,19 @@
 package com.kaliente.pos.application.services;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.kaliente.pos.application.dtos.auth.PersonnelDetailsDto;
+import com.kaliente.pos.application.dtos.auth.RegisterAdminRequestDto;
+import com.kaliente.pos.application.dtos.auth.RegisterAdminResponseDto;
+import com.kaliente.pos.application.dtos.auth.RegisterPersonnelRequestDto;
+import com.kaliente.pos.application.dtos.auth.RegisterPersonnelResponseDto;
 import com.kaliente.pos.application.dtos.auth.RegisterRequestDto;
 import com.kaliente.pos.domain.useraggregate.ApplicationUser;
 import com.kaliente.pos.domain.useraggregate.ApplicationUserRepository;
@@ -20,8 +23,6 @@ import com.kaliente.pos.sharedkernel.util.JwtUtil;
 @Service
 public class AuthService {
 
-	@Autowired
-	private AuthenticationManager authManager;
 	
 	@Autowired
 	private UserDetailService userDetailService;
@@ -39,6 +40,14 @@ public class AuthService {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    public List<PersonnelDetailsDto> getPersonnelList() {
+    	List<ApplicationUser> foundPersonnel = userRepository.findAll();
+    	
+    	List<PersonnelDetailsDto> personnelList = foundPersonnel.stream().map(element -> modelMapper.map(element, PersonnelDetailsDto.class)).collect(Collectors.toList());
+    	
+    	return personnelList;
+    }
 	
 	
 	public String register(RegisterRequestDto registerDto) {
@@ -57,6 +66,18 @@ public class AuthService {
 		final String jToken = jwtTokenUtil.generateToken(newUserDetail);
 		
 		return jToken;
+	}
+	
+	public RegisterAdminResponseDto registerAdmin(RegisterAdminRequestDto dto) {
+		ApplicationUser adminToRegister = modelMapper.map(dto, ApplicationUser.class);
+		ApplicationUser registeredAdmin = userRepository.save(adminToRegister);
+		return new RegisterAdminResponseDto(registeredAdmin.getId());
+	}
+	
+	public RegisterPersonnelResponseDto registerPersonnel(RegisterPersonnelRequestDto dto) {
+		ApplicationUser userToRegister = modelMapper.map(dto, ApplicationUser.class);
+		ApplicationUser registeredUser = userRepository.save(userToRegister);
+		return new RegisterPersonnelResponseDto(registeredUser.getId());
 	}
 	
 	
