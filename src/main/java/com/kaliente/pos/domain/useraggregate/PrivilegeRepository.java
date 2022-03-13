@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PrivilegeRepository extends JpaRepository<Privilege, UUID> {
 
-	@Query("select p from privilege p where p.title = ?1")
+	@Query("select p from privileges p where p.title = ?1")
 	Privilege findByTitle(String title);
 }

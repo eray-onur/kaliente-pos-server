@@ -2,6 +2,8 @@ package com.kaliente.pos.domain.productaggregate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -9,9 +11,10 @@ import javax.persistence.OneToMany;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
-@Entity
+@Entity(name="product_catalogues")
 public class ProductCatalogue extends BaseEntity {
-	
+
+	@Column(unique=true)
 	private String title;
 	private String description;
 

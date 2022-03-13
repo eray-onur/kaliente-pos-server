@@ -2,6 +2,7 @@ package com.kaliente.pos.domain.useraggregate;
 
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
@@ -11,9 +12,10 @@ import javax.persistence.JoinColumn;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
-@Entity(name="role")
+@Entity(name="roles")
 public class Role extends BaseEntity {
-	
+
+	@Column(unique=true)
 	private String title;
 	
 	public Role() {}
@@ -34,12 +36,12 @@ public class Role extends BaseEntity {
 	}
 
 
-	public Collection<ApplicationUser> getUsers() {
+	public Collection<User> getUsers() {
 		return users;
 	}
 
 
-	public void setUsers(Collection<ApplicationUser> users) {
+	public void setUsers(Collection<User> users) {
 		this.users = users;
 	}
 
@@ -55,7 +57,7 @@ public class Role extends BaseEntity {
 
 
 	@ManyToMany(mappedBy="roles")
-	private Collection<ApplicationUser> users;
+	private Collection<User> users;
 	
 	
 	@ManyToMany(fetch = FetchType.EAGER)

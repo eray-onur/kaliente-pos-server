@@ -5,34 +5,33 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.kaliente.pos.domain.useraggregate.ApplicationUser;
-import com.kaliente.pos.domain.useraggregate.ApplicationUserRepository;
+import com.kaliente.pos.domain.useraggregate.User;
+import com.kaliente.pos.domain.useraggregate.UserRepository;
 
 @Service
 public class UserDetailService implements UserDetailsService {
 
 	@Autowired
-	private ApplicationUserRepository userRepository;
+	private UserRepository userRepository;
 	
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		ApplicationUser foundUser = userRepository.findByEmail(email);
+		User foundUser = userRepository.findByEmail(email);
 		
 		if(foundUser == null) {
 			throw new UsernameNotFoundException("Invalid email/password.");
 		}
 		
-		return new User(foundUser.getEmail(), foundUser.getPassword(), foundUser.isActive(), true, true, true, getAuthority(foundUser));
+		return new org.springframework.security.core.userdetails.User(foundUser.getEmail(), foundUser.getPassword(), foundUser.isActive(), true, true, true, getAuthority(foundUser));
 	}
 	
-	private Set<SimpleGrantedAuthority> getAuthority(ApplicationUser user) {
+	private Set<SimpleGrantedAuthority> getAuthority(User user) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 		user.getRoles().forEach(role -> {
 			//authorities.add(new SimpleGrantedAuthority(role.getName()));

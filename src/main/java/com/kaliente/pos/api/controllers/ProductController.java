@@ -47,14 +47,14 @@ public class ProductController {
 	
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
-	@PostMapping("/addNewProduct")
+	@PostMapping("/add")
 	public ResponseEntity<?> addNewProduct(@RequestBody ProductCreateDto dto) {
 		productService.createNewProduct(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
-	@PutMapping("/updateProduct")
+	@PutMapping("/update")
 	public ResponseEntity<?> updateProduct(@RequestBody ProductDetailsDto dto) {
 		this.productService.updateProduct(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);

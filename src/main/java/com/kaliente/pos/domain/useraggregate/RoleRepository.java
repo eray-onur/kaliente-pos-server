@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface RoleRepository extends JpaRepository<Role, UUID> {
 
-	@Query("select r from role r where r.title = ?1")
+	@Query("select r from roles r where r.title = ?1")
 	Role findByTitle(String title);
 }

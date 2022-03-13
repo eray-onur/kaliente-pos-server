@@ -44,14 +44,14 @@ public class ProductCatalogueController {
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
-	@PostMapping("/addNewCatalogue")
+	@PostMapping("/add")
 	public ResponseEntity<?> addNewCatalogue(@RequestBody ProductCatalogueDetailsDto dto) {
 		productCatalogueService.createNewProductCatalogue(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
-	@PutMapping("/updateCatalogue")
+	@PutMapping("/update")
 	public ResponseEntity<?> updateCatalogue(@RequestBody ProductCatalogueDetailsDto dto) {
 		this.productCatalogueService.updateProductCatalogue(dto);
 		return new ResponseEntity<>(HttpStatus.CREATED);

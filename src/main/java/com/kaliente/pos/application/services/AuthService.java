@@ -15,8 +15,8 @@ import com.kaliente.pos.application.dtos.auth.RegisterAdminResponseDto;
 import com.kaliente.pos.application.dtos.auth.RegisterPersonnelRequestDto;
 import com.kaliente.pos.application.dtos.auth.RegisterPersonnelResponseDto;
 import com.kaliente.pos.application.dtos.auth.RegisterRequestDto;
-import com.kaliente.pos.domain.useraggregate.ApplicationUser;
-import com.kaliente.pos.domain.useraggregate.ApplicationUserRepository;
+import com.kaliente.pos.domain.useraggregate.User;
+import com.kaliente.pos.domain.useraggregate.UserRepository;
 import com.kaliente.pos.domain.useraggregate.RoleRepository;
 import com.kaliente.pos.sharedkernel.util.JwtUtil;
 
@@ -31,7 +31,7 @@ public class AuthService {
 	private JwtUtil jwtTokenUtil;
 	
 	@Autowired
-	private ApplicationUserRepository userRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private RoleRepository roleRepository;
@@ -42,7 +42,7 @@ public class AuthService {
     private ModelMapper modelMapper;
     
     public List<PersonnelDetailsDto> getPersonnelList() {
-    	List<ApplicationUser> foundPersonnel = userRepository.findAll();
+    	List<User> foundPersonnel = userRepository.findAll();
     	
     	List<PersonnelDetailsDto> personnelList = foundPersonnel.stream().map(element -> modelMapper.map(element, PersonnelDetailsDto.class)).collect(Collectors.toList());
     	
@@ -52,9 +52,9 @@ public class AuthService {
 	
 	public String register(RegisterRequestDto registerDto) {
 		
-		ApplicationUser userToCreate = modelMapper.map(registerDto, ApplicationUser.class);
+		User userToCreate = modelMapper.map(registerDto, User.class);
 		userToCreate.setRoles(Arrays.asList(roleRepository.findByTitle("ROLE_PERSONNEL")));
-		ApplicationUser createdUser = this.userRepository.save(userToCreate);
+		User createdUser = this.userRepository.save(userToCreate);
 		
 		if(createdUser == null) {
 			throw new Error("Could not create character.");
@@ -69,14 +69,14 @@ public class AuthService {
 	}
 	
 	public RegisterAdminResponseDto registerAdmin(RegisterAdminRequestDto dto) {
-		ApplicationUser adminToRegister = modelMapper.map(dto, ApplicationUser.class);
-		ApplicationUser registeredAdmin = userRepository.save(adminToRegister);
+		User adminToRegister = modelMapper.map(dto, User.class);
+		User registeredAdmin = userRepository.save(adminToRegister);
 		return new RegisterAdminResponseDto(registeredAdmin.getId());
 	}
 	
 	public RegisterPersonnelResponseDto registerPersonnel(RegisterPersonnelRequestDto dto) {
-		ApplicationUser userToRegister = modelMapper.map(dto, ApplicationUser.class);
-		ApplicationUser registeredUser = userRepository.save(userToRegister);
+		User userToRegister = modelMapper.map(dto, User.class);
+		User registeredUser = userRepository.save(userToRegister);
 		return new RegisterPersonnelResponseDto(registeredUser.getId());
 	}
 	

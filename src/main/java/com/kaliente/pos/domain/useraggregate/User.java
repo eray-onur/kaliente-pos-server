@@ -3,6 +3,7 @@ package com.kaliente.pos.domain.useraggregate;
 import java.util.Collection;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
@@ -12,12 +13,14 @@ import javax.persistence.JoinColumn;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
-@Entity(name = "application_user")
-public class ApplicationUser  extends BaseEntity implements AggregateRoot {
+@Entity(name = "users")
+public class User  extends BaseEntity implements AggregateRoot {
+	
 	
 	private String userName;
 	private String firstName;
 	private String lastName;
+	@Column(unique=true)
 	private String email;
 	private String password;
 	

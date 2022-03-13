@@ -2,14 +2,16 @@ package com.kaliente.pos.domain.useraggregate;
 
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
-@Entity(name="privilege")
+@Entity(name="privileges")
 public class Privilege extends BaseEntity {
-	
+
+	@Column(unique=true)
 	private String title;
 	
 	public Privilege() {}

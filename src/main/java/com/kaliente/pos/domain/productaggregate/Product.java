@@ -2,6 +2,7 @@ package com.kaliente.pos.domain.productaggregate;
 
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -9,9 +10,10 @@ import javax.persistence.ManyToOne;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
-@Entity
+@Entity(name="products")
 public class Product extends BaseEntity implements AggregateRoot {
 	
+	@Column(unique=true)
 	private String title;
 	private String description;
 	private double price;
