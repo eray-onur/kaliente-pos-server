@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.kaliente.pos.application.dtos.auth.PersonnelDetailsDto;
-import com.kaliente.pos.application.dtos.auth.RegisterAdminRequestDto;
-import com.kaliente.pos.application.dtos.auth.RegisterAdminResponseDto;
-import com.kaliente.pos.application.dtos.auth.RegisterPersonnelRequestDto;
-import com.kaliente.pos.application.dtos.auth.RegisterPersonnelResponseDto;
-import com.kaliente.pos.application.dtos.auth.RegisterRequestDto;
 import com.kaliente.pos.domain.useraggregate.User;
 import com.kaliente.pos.domain.useraggregate.UserRepository;
+import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterAdminResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterRequestDto;
 import com.kaliente.pos.domain.useraggregate.RoleRepository;
 import com.kaliente.pos.sharedkernel.util.JwtUtil;
 

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.kaliente.pos.application.mappings.DtoMapper;
+import com.kaliente.pos.application.models.ApplicationModelMapper;
 
 
 @SpringBootApplication
@@ -21,7 +21,7 @@ public class PosApplication {
 	public ModelMapper modelMapper() {
 	    ModelMapper mapper = new ModelMapper();
 	    
-	    new DtoMapper(mapper);
+	    new ApplicationModelMapper(mapper);
 	    
 	    return mapper;
 	}

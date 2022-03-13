@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kaliente.pos.application.dtos.product.ProductCreateDto;
-import com.kaliente.pos.application.dtos.product.ProductDetailsDto;
+import com.kaliente.pos.application.models.dtos.product.ProductCreateDto;
+import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.application.services.ProductService;
 
 @RestController @RequestMapping("product")

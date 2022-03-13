@@ -42,16 +42,14 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	
-	
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(final HttpSecurity http) throws Exception {
 		http
 			.cors().and()
 			.authorizeRequests(authorizeRequests -> {
 				authorizeRequests
-		        .antMatchers("/auth/register", "/auth/authenticate").permitAll()
+		        .antMatchers("/auth/register", "/auth/authenticate", "/auth/health_check").permitAll()
 		        .anyRequest().authenticated();
-				
 			})
 			.csrf(csrf -> {
 				csrf.disable();
@@ -59,8 +57,10 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
+		
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
+	
 	
 	@Override
 	@Bean
@@ -77,16 +77,16 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-	    return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
 	public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
 	    DefaultWebSecurityExpressionHandler expressionHandler = new DefaultWebSecurityExpressionHandler();
 	    expressionHandler.setRoleHierarchy(roleHierarchy());
 	    return expressionHandler;
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder()
+	{
+	    return new BCryptPasswordEncoder();
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.kaliente.pos.application.dtos.auth;
+package com.kaliente.pos.application.models.dtos.auth;
 
 import java.util.UUID;
 

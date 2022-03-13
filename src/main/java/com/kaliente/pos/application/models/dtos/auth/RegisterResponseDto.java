@@ -1,4 +1,4 @@
-package com.kaliente.pos.application.dtos.auth;
+package com.kaliente.pos.application.models.dtos.auth;
 
 public class RegisterResponseDto {
 	private String token;

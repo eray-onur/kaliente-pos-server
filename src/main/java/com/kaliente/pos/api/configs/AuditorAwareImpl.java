@@ -30,7 +30,6 @@ public class AuditorAwareImpl implements AuditorAware<UUID> {
         
         UUID auditorId = userRepository.findByEmail(authenticatedUser.getUsername()).getId();
 		
-		// TODO Auto-generated method stub
 		return Optional.of(auditorId);
 	}
 	

@@ -1,11 +1,10 @@
-package com.kaliente.pos.application.dtos.product;
+package com.kaliente.pos.application.models.dtos.product;
 
 import java.util.UUID;
 
-import com.kaliente.pos.application.dtos.productcatalogue.ProductCatalogueDetailsDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
 
-
-public class ProductDetailsDto {
+public class ProductCreateDto {
 	private UUID id;
 	private String title;
 	private String description;
@@ -39,7 +38,10 @@ public class ProductDetailsDto {
 	public ProductCatalogueDetailsDto getCatalogue() {
 		return catalogue;
 	}
-	public void setCatalogue(ProductCatalogueDetailsDto catalogue) {
-		this.catalogue = catalogue;
+	public void setCatalogue(ProductCatalogueDetailsDto productCategoryDetails) {
+		this.catalogue = productCategoryDetails;
 	}
+	
+	
+	
 }

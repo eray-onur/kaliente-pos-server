@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kaliente.pos.application.dtos.auth.AuthenticationRequestDto;
-import com.kaliente.pos.application.dtos.auth.AuthenticationResponseDto;
-import com.kaliente.pos.application.dtos.auth.GetPersonnelListResponseDto;
-import com.kaliente.pos.application.dtos.auth.PersonnelDetailsDto;
-import com.kaliente.pos.application.dtos.auth.RegisterAdminRequestDto;
-import com.kaliente.pos.application.dtos.auth.RegisterAdminResponseDto;
-import com.kaliente.pos.application.dtos.auth.RegisterPersonnelRequestDto;
-import com.kaliente.pos.application.dtos.auth.RegisterPersonnelResponseDto;
-import com.kaliente.pos.application.dtos.auth.RegisterRequestDto;
-import com.kaliente.pos.application.dtos.auth.RegisterResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.AuthenticationRequestDto;
+import com.kaliente.pos.application.models.dtos.auth.AuthenticationResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.GetPersonnelListResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterAdminResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelResponseDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterRequestDto;
+import com.kaliente.pos.application.models.dtos.auth.RegisterResponseDto;
 import com.kaliente.pos.application.services.AuthService;
 import com.kaliente.pos.sharedkernel.util.JwtUtil;
 
@@ -64,6 +64,12 @@ public class AuthController {
 		return ResponseEntity.ok(new AuthenticationResponseDto(jToken));
 	
 	}
+	
+	@GetMapping(value="health_check")
+	public ResponseEntity<?> health_check() throws Exception {
+		throw new Exception();
+	}
+	
 	
 	@PreAuthorize("hasAnyRole('ROLE_SUPERADMIN')")
 	@PostMapping("/registerAdmin")

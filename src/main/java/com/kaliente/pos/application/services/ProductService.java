@@ -8,8 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kaliente.pos.application.dtos.product.ProductCreateDto;
-import com.kaliente.pos.application.dtos.product.ProductDetailsDto;
+import com.kaliente.pos.application.models.dtos.product.ProductCreateDto;
+import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductRepository;
 

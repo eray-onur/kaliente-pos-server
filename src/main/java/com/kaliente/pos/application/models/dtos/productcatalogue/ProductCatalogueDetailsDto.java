@@ -1,4 +1,4 @@
-package com.kaliente.pos.application.dtos.productcatalogue;
+package com.kaliente.pos.application.models.dtos.productcatalogue;
 
 import java.util.UUID;
 

@@ -1,9 +1,10 @@
-package com.kaliente.pos.application.dtos.auth;
+package com.kaliente.pos.application.models.dtos.auth;
 
-public class PersonnelDetailsDto {
+public class RegisterAdminRequestDto {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String password;
 	
 	public String getFirstName() {
 		return firstName;
@@ -22,5 +23,11 @@ public class PersonnelDetailsDto {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

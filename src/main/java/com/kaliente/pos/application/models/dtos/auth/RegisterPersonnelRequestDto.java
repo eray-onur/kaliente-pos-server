@@ -1,6 +1,6 @@
-package com.kaliente.pos.application.dtos.auth;
+package com.kaliente.pos.application.models.dtos.auth;
 
-public class RegisterAdminRequestDto {
+public class RegisterPersonnelRequestDto {
 	private String firstName;
 	private String lastName;
 	private String email;
