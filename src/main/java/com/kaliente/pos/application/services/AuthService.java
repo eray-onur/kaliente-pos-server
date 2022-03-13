@@ -22,10 +22,6 @@ import com.kaliente.pos.sharedkernel.util.JwtUtil;
 
 @Service
 public class AuthService {
-
-	
-	@Autowired
-	private UserDetailService userDetailService;
 	
 	@Autowired
 	private JwtUtil jwtTokenUtil;
@@ -35,7 +31,6 @@ public class AuthService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
-
 	
 
     @Autowired
@@ -60,7 +55,7 @@ public class AuthService {
 			throw new Error("Could not create character.");
 		}
 		
-		UserDetails newUserDetail = userDetailService.loadUserByUsername(
+		UserDetails newUserDetail = userRepository.loadUserByUsername(
 				createdUser.getEmail()
 		);
 		final String jToken = jwtTokenUtil.generateToken(newUserDetail);

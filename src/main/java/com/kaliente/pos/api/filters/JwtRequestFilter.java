@@ -15,13 +15,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.kaliente.pos.application.services.UserDetailService;
+import com.kaliente.pos.domain.useraggregate.UserRepository;
 import com.kaliente.pos.sharedkernel.util.JwtUtil;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 	@Autowired
-	private UserDetailService userDetailService;
+	private UserRepository userRepository;
 	
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -41,7 +41,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		}
 		
 		if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = this.userDetailService.loadUserByUsername(username);
+			UserDetails userDetails = this.userRepository.loadUserByUsername(username);
 			
 			if(jwtUtil.validateToken(jwt, userDetails)) {
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtUtil.getAuthentication(jwt, SecurityContextHolder.getContext().getAuthentication(), userDetails);
