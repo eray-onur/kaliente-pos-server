@@ -2,15 +2,17 @@ package com.kaliente.pos.application.models.dtos.auth;
 
 import java.util.UUID;
 
-public class RegisterPersonnelResponseDto {
-	private UUID createdPersonnelId;
+import com.kaliente.pos.application.models.base.BaseResponse;
 
-	public RegisterPersonnelResponseDto(UUID createdPersonnelId) {
-		super();
-		this.createdPersonnelId = createdPersonnelId;
+public class RegisterPersonnelResponseDto extends BaseResponse<UUID> {
+	private UUID registeredPersonnelId;
+
+	public RegisterPersonnelResponseDto(UUID registeredPersonnelId) {
+		super(registeredPersonnelId);
+		this.registeredPersonnelId = registeredPersonnelId;
 	}
 
 	public UUID getCreatedPersonnelId() {
-		return createdPersonnelId;
+		return registeredPersonnelId;
 	}
 }

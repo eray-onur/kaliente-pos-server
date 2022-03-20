@@ -1,23 +1,19 @@
 package com.kaliente.pos.application.models.base;
 
 
-
-public class BaseResponse {
-	private int statusCode;
+public class BaseResponse<T> {
 	private String message;
+	private T data;
 	
-	public BaseResponse(int statusCode, String message) {
+	public BaseResponse(T data) {
 		super();
-		this.statusCode = statusCode;
+		this.data = data;
+	}
+	
+	public BaseResponse(T data, String message) {
+		super();
+		this.data = data;
 		this.message = message;
-	}
-
-	public int getStatusCode() {
-		return statusCode;
-	}
-
-	public void setStatusCode(int statusCode) {
-		this.statusCode = statusCode;
 	}
 
 	public String getMessage() {
@@ -28,4 +24,12 @@ public class BaseResponse {
 		this.message = message;
 	}
 
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+	
 }

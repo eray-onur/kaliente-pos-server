@@ -1,18 +1,21 @@
 package com.kaliente.pos.application.models.dtos.auth;
 
-public class RegisterResponseDto {
-	private String token;
+import com.kaliente.pos.application.models.base.BaseResponse;
 
-	public RegisterResponseDto(String token) {
-		this.token = token;
+public class RegisterResponseDto extends BaseResponse<String> {
+	private String jwt;
+
+	public RegisterResponseDto(String jwt) {
+		super(jwt);
+		this.jwt = jwt;
 	}
 
 	public String getToken() {
-		return token;
+		return jwt;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
+	public void setToken(String jwt) {
+		this.jwt = jwt;
 	}
 	
 	

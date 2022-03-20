@@ -18,7 +18,7 @@ public class GlobalExceptionHandler
   extends ResponseEntityExceptionHandler {
     
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseResponse> globalExceptionHandler(Exception ex, WebRequest request) {
-      return new ResponseEntity<BaseResponse>(new BaseResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Unknown error."), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<BaseResponse<?>> globalExceptionHandler(Exception ex, WebRequest request) {
+      return new ResponseEntity<BaseResponse<?>>(new BaseResponse<String>(null, ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }
