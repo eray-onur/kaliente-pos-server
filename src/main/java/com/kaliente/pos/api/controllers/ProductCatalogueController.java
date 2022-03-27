@@ -16,7 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kaliente.pos.application.models.dtos.productcatalogue.GetAllProductCataloguesResponseDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.GetProductCatalogueByIdResponseDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueAddRequestDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueAddResponseDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateRequestDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateResponseDto;
 import com.kaliente.pos.application.services.ProductCatalogueService;
 
 @RestController @RequestMapping("/product_catalogue")
@@ -27,34 +33,45 @@ public class ProductCatalogueController {
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getById/{id}")
-	public ResponseEntity<ProductCatalogueDetailsDto> getById(@PathVariable("id") UUID id) {
+	public ResponseEntity<GetProductCatalogueByIdResponseDto> getById(@PathVariable("id") UUID id) {
+		
 		ProductCatalogueDetailsDto productCatalogue = this.productCatalogueService.getProductCatalogueById(id);
-		if(productCatalogue != null) {
-			return new ResponseEntity<ProductCatalogueDetailsDto>(productCatalogue, HttpStatus.OK);
-		}
-		return new ResponseEntity<ProductCatalogueDetailsDto>(HttpStatus.BAD_REQUEST);
+		var response = new GetProductCatalogueByIdResponseDto(productCatalogue);
+		
+		return new ResponseEntity<GetProductCatalogueByIdResponseDto>(response, HttpStatus.OK);
 		
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getAll")
-	public ResponseEntity<List<ProductCatalogueDetailsDto>> getAll() {
+	public ResponseEntity<GetAllProductCataloguesResponseDto> getAll() {
+		
 		List<ProductCatalogueDetailsDto> productCatalogues = this.productCatalogueService.getAllCatalogues();
-		return new ResponseEntity<List<ProductCatalogueDetailsDto>>(productCatalogues, HttpStatus.OK);
+		var response = new GetAllProductCataloguesResponseDto(productCatalogues);
+		
+		return new ResponseEntity<GetAllProductCataloguesResponseDto>(response, HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PostMapping("/add")
-	public ResponseEntity<?> addNewCatalogue(@RequestBody ProductCatalogueDetailsDto dto) {
-		productCatalogueService.createNewProductCatalogue(dto);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<ProductCatalogueAddResponseDto> addNewCatalogue(@RequestBody ProductCatalogueAddRequestDto dto) {
+		
+		var result = productCatalogueService.createNewProductCatalogue(dto);
+		var response = new ProductCatalogueAddResponseDto(result);
+		
+		return new ResponseEntity<ProductCatalogueAddResponseDto>(response, HttpStatus.CREATED);
+		
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateCatalogue(@RequestBody ProductCatalogueDetailsDto dto) {
-		this.productCatalogueService.updateProductCatalogue(dto);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<ProductCatalogueUpdateResponseDto> updateCatalogue(@RequestBody ProductCatalogueUpdateRequestDto dto) {
+		
+		var result = this.productCatalogueService.updateProductCatalogue(dto);
+		var response = new ProductCatalogueUpdateResponseDto(result);
+		
+		return new ResponseEntity<ProductCatalogueUpdateResponseDto>(response, HttpStatus.CREATED);
+		
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")

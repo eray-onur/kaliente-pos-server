@@ -4,13 +4,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kaliente.pos.application.models.dtos.product.ProductCreateDto;
+import com.kaliente.pos.application.models.dtos.product.ProductAddRequestDto;
 import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
+import com.kaliente.pos.application.models.dtos.product.ProductUpdateRequestDto;
 import com.kaliente.pos.domain.productaggregate.Product;
+import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 import com.kaliente.pos.domain.productaggregate.ProductRepository;
 
 @Service
@@ -18,6 +22,8 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
+//	@Autowired
+//	private ProductCatalogueRepository productCatalogueRepository;
 	
 
     @Autowired
@@ -37,21 +43,22 @@ public class ProductService {
 		return products.stream().map(p -> modelMapper.map(p, ProductDetailsDto.class)).toList();
 	}
 	
-	public Product createNewProduct(ProductCreateDto dto) {
+	public UUID createNewProduct(ProductAddRequestDto dto) {
 		Product newProduct = modelMapper.map(dto, Product.class);
 		newProduct.setCatalogue(newProduct.getCatalogue());
 		
-		return this.productRepository.save(newProduct);
+		var result = this.productRepository.save(newProduct);
+		return result.getId();
 	}
 	
-	public Product updateProduct(ProductDetailsDto dto) {
-		Product productToUpdate = modelMapper.map(dto, Product.class);
-		return this.productRepository.save(productToUpdate);
+	public UUID updateProduct(ProductUpdateRequestDto dto) {
+		this.productRepository.updateProduct(dto.getId(), dto.getTitle(), dto.getDescription(), dto.getPrice());
+		return dto.getId();
 	}
 	
-	public int deleteProduct(UUID productId) {
+	public UUID deleteProduct(UUID productId) {
 		this.productRepository.deleteById(productId);
-		return 1;
+		return productId;
 	}
 	
 }

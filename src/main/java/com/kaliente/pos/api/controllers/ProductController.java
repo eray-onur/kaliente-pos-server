@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kaliente.pos.application.models.dtos.product.ProductCreateDto;
+import com.kaliente.pos.application.models.dtos.product.GetAllProductsResponseDto;
+import com.kaliente.pos.application.models.dtos.product.GetProductByIdResponseDto;
+import com.kaliente.pos.application.models.dtos.product.ProductAddRequestDto;
+import com.kaliente.pos.application.models.dtos.product.ProductAddResponseDto;
+import com.kaliente.pos.application.models.dtos.product.ProductDeleteResponseDto;
 import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
+import com.kaliente.pos.application.models.dtos.product.ProductUpdateRequestDto;
+import com.kaliente.pos.application.models.dtos.product.ProductUpdateResponseDto;
 import com.kaliente.pos.application.services.ProductService;
 
 @RestController @RequestMapping("product")
@@ -28,43 +34,54 @@ public class ProductController {
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getById/{id}")
-	public ResponseEntity<ProductDetailsDto> getById(@PathVariable("id") UUID id) {
-		ProductDetailsDto product = this.productService.getProductById(id);
-		if(product != null) {
-			return new ResponseEntity<ProductDetailsDto>(product, HttpStatus.OK);
-		}
-		return new ResponseEntity<ProductDetailsDto>(HttpStatus.BAD_REQUEST);
+	public ResponseEntity<GetProductByIdResponseDto> getById(@PathVariable("id") UUID id) {
 		
+		ProductDetailsDto product = this.productService.getProductById(id);
+		var response = new GetProductByIdResponseDto(product);
+		
+		return new ResponseEntity<GetProductByIdResponseDto>(response, HttpStatus.OK);
 	}
 	
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getAll")
-	public ResponseEntity<List<ProductDetailsDto>> getAll() {
+	public ResponseEntity<GetAllProductsResponseDto> getAll() {
+		
 		List<ProductDetailsDto> products = this.productService.getAll();
-		return new ResponseEntity<List<ProductDetailsDto>>(products, HttpStatus.OK);
+		var response = new GetAllProductsResponseDto(products);
+		
+		return new ResponseEntity<GetAllProductsResponseDto>(response, HttpStatus.OK);
 	}
 	
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PostMapping("/add")
-	public ResponseEntity<?> addNewProduct(@RequestBody ProductCreateDto dto) {
-		productService.createNewProduct(dto);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<ProductAddResponseDto> addNewProduct(@RequestBody ProductAddRequestDto dto) {
+		
+		var result = productService.createNewProduct(dto);
+		var response = new ProductAddResponseDto(result);
+		
+		return new ResponseEntity<ProductAddResponseDto>(response, HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateProduct(@RequestBody ProductDetailsDto dto) {
-		this.productService.updateProduct(dto);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<ProductUpdateResponseDto> updateProduct(@RequestBody ProductUpdateRequestDto dto) {
+		
+		var result = this.productService.updateProduct(dto);
+		var response = new ProductUpdateResponseDto(result);
+		
+		return new ResponseEntity<ProductUpdateResponseDto>(response, HttpStatus.CREATED);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable("id") UUID id) {
-		this.productService.deleteProduct(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<ProductDeleteResponseDto> deleteProduct(@PathVariable("id") UUID id) {
+		
+		var result = this.productService.deleteProduct(id);
+		var response = new ProductDeleteResponseDto(result);
+		
+		return new ResponseEntity<ProductDeleteResponseDto>(response, HttpStatus.OK);
 	}
 	
 }

@@ -3,16 +3,16 @@ package com.kaliente.pos.application.models.base;
 
 public class BaseResponse<T> {
 	private String message;
-	private T data;
+	private T payload;
 	
-	public BaseResponse(T data) {
+	public BaseResponse(T payload) {
 		super();
-		this.data = data;
+		this.payload = payload;
 	}
 	
-	public BaseResponse(T data, String message) {
+	public BaseResponse(T payload, String message) {
 		super();
-		this.data = data;
+		this.payload = payload;
 		this.message = message;
 	}
 
@@ -24,12 +24,12 @@ public class BaseResponse<T> {
 		this.message = message;
 	}
 
-	public T getData() {
-		return data;
+	public T getPayload() {
+		return payload;
 	}
 
-	public void setData(T data) {
-		this.data = data;
+	public void setPayload(T payload) {
+		this.payload = payload;
 	}
 	
 }

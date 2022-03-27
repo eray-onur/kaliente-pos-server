@@ -66,15 +66,15 @@ public class AuthController {
 	}
 	
 	@GetMapping(value="health_check")
-	public ResponseEntity<?> health_check() throws Exception {
-		throw new Exception();
+	public ResponseEntity<String> health_check() throws Exception {
+		return ResponseEntity.ok("Things are looking good!");
 	}
 	
 	
 	@PreAuthorize("hasAnyRole('ROLE_SUPERADMIN')")
 	@PostMapping("/registerAdmin")
 	public ResponseEntity<RegisterAdminResponseDto> registerAdmin(@RequestBody RegisterAdminRequestDto requestDto) {
-		RegisterAdminResponseDto response = authService.registerAdmin(requestDto);
+		var response = authService.registerAdmin(requestDto);
 		return ResponseEntity.ok(response);
 	}
 	
@@ -82,7 +82,7 @@ public class AuthController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping("/registerPersonnel")
 	public ResponseEntity<RegisterPersonnelResponseDto> registerPersonnel(@RequestBody RegisterPersonnelRequestDto requestDto) {
-		RegisterPersonnelResponseDto registeredPersonnel = authService.registerPersonnel(requestDto);
+		var registeredPersonnel = authService.registerPersonnel(requestDto);
 		return ResponseEntity.ok(registeredPersonnel);
 	}
 	

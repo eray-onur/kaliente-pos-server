@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueAddRequestDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
+import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateRequestDto;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 
@@ -35,7 +37,7 @@ public class ProductCatalogueService {
 			return productCatalogues.stream().map(p -> modelMapper.map(p, ProductCatalogueDetailsDto.class)).toList();
 		}
 		
-		public ProductCatalogueDetailsDto createNewProductCatalogue(ProductCatalogueDetailsDto dto) {
+		public UUID createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
 			ProductCatalogue newProductCatalogue = modelMapper.map(dto, ProductCatalogue.class);
 			
 			UUID parentCatalogueId = dto.getParentCatalogueId();
@@ -46,20 +48,22 @@ public class ProductCatalogueService {
 				}
 			}
 			
-			this.catalogueRepository.save(newProductCatalogue);
-			return dto;
+			var createdProduct = this.catalogueRepository.save(newProductCatalogue);
+			return createdProduct.getId();
 		}
 		
-		public ProductCatalogueDetailsDto updateProductCatalogue(ProductCatalogueDetailsDto dto) {
-			Optional<ProductCatalogue> productToUpdate = this.catalogueRepository.findById(dto.getId());
-			if(productToUpdate.isEmpty()) return null;
+		public UUID updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
+//			Optional<ProductCatalogue> productToUpdate = this.catalogueRepository.findById(dto.getId());
+//			if(productToUpdate.isEmpty()) return null;
+//			
+//			productToUpdate.get().setTitle(dto.getTitle());
+//			productToUpdate.get().setDescription(dto.getDescription());
+//			
+//			var updatedProduct = this.catalogueRepository.save(productToUpdate.get());
 			
-			productToUpdate.get().setTitle(dto.getTitle());
-			productToUpdate.get().setDescription(dto.getDescription());
+			this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription());
 			
-			this.catalogueRepository.save(productToUpdate.get());
-			
-			return dto;
+			return dto.getId();
 		}
 		
 		public int deleteProductCatalogue(UUID catalogueId) {

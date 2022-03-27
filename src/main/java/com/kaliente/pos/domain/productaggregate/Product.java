@@ -6,19 +6,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
 @Entity(name="products")
+@Table
 public class Product extends BaseEntity implements AggregateRoot {
 	
 	@Column(unique=true)
 	private String title;
+	@Column
 	private String description;
+	@Column
 	private double price;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="catalogue_id", nullable = true)
 	private ProductCatalogue catalogue;
 
