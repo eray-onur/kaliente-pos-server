@@ -1,8 +1,12 @@
 package com.kaliente.pos.application.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import com.kaliente.pos.application.models.dtos.auth.RegisterAdminResponseDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelResponseDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterRequestDto;
+import com.kaliente.pos.domain.useraggregate.Role;
 import com.kaliente.pos.domain.useraggregate.RoleRepository;
 import com.kaliente.pos.sharedkernel.util.JwtUtil;
 
@@ -63,16 +68,29 @@ public class AuthService {
 		return jToken;
 	}
 	
+	@Transactional
 	public RegisterAdminResponseDto registerAdmin(RegisterAdminRequestDto dto) {
 		User adminToRegister = modelMapper.map(dto, User.class);
+
+		Role adminRole = this.roleRepository.findByTitle("ROLE_ADMIN");
+		adminToRegister.getRoles().add(adminRole);
+		adminRole.getUsers().add(adminToRegister);
+
 		User registeredAdmin = userRepository.save(adminToRegister);
-		return new RegisterAdminResponseDto(registeredAdmin.getId());
+		return new RegisterAdminResponseDto(registeredAdmin.getId(), registeredAdmin.getEmail());
 	}
 	
+	@Transactional
 	public RegisterPersonnelResponseDto registerPersonnel(RegisterPersonnelRequestDto dto) {
-		User userToRegister = modelMapper.map(dto, User.class);
-		User registeredUser = userRepository.save(userToRegister);
-		return new RegisterPersonnelResponseDto(registeredUser.getId());
+		User personnelToRegister = modelMapper.map(dto, User.class);
+
+		Role personnelRole = this.roleRepository.findByTitle("ROLE_PERSONNEL");
+		personnelToRegister.getRoles().add(personnelRole);
+		personnelRole.getUsers().add(personnelToRegister);
+
+
+		User registeredUser = userRepository.save(personnelToRegister);
+		return new RegisterPersonnelResponseDto(registeredUser.getId(), registeredUser.getEmail());
 	}
 	
 	

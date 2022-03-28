@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import com.kaliente.pos.application.models.dtos.product.ProductAddRequestDto;
 import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
 import com.kaliente.pos.application.models.dtos.product.ProductUpdateRequestDto;
 import com.kaliente.pos.domain.productaggregate.Product;
-import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 import com.kaliente.pos.domain.productaggregate.ProductRepository;
 
 @Service

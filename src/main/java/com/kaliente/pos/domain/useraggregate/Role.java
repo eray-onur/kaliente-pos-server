@@ -1,5 +1,6 @@
 package com.kaliente.pos.domain.useraggregate;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Column;
@@ -14,10 +15,24 @@ import com.kaliente.pos.domain.seedwork.BaseEntity;
 
 @Entity(name="roles")
 public class Role extends BaseEntity {
+	
 
+	
 	@Column(unique=true)
 	private String title;
+
+	@ManyToMany(mappedBy="roles")
+	private Collection<User> users;
 	
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+		name = "role_privileges",
+		joinColumns = @JoinColumn(name = "role_id", referencedColumnName="id"),
+		inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName="id")
+	)
+	private Collection<Privilege> privileges = new ArrayList<Privilege>();
+
 	public Role() {}
 	
 	public Role(String title) {
@@ -25,7 +40,7 @@ public class Role extends BaseEntity {
 		this.title = title;
 	}
 
-
+	
 	public String getTitle() {
 		return title;
 	}
@@ -55,17 +70,5 @@ public class Role extends BaseEntity {
 		this.privileges = privileges;
 	}
 
-
-	@ManyToMany(mappedBy="roles")
-	private Collection<User> users;
-	
-	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-		name = "role_privileges",
-		joinColumns = @JoinColumn(name = "role_id", referencedColumnName="id"),
-		inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName="id")
-	)
-	private Collection<Privilege> privileges;
 	
 }

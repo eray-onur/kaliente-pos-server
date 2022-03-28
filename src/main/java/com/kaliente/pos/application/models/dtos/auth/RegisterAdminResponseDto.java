@@ -6,13 +6,20 @@ import com.kaliente.pos.application.models.base.BaseResponse;
 
 public class RegisterAdminResponseDto extends BaseResponse<UUID> {
 	private UUID registeredAdminId;
+	private String registeredAdminEmail;
 
-	public RegisterAdminResponseDto(UUID registeredAdminId) {
+	public RegisterAdminResponseDto(UUID registeredAdminId, String registeredAdminEmail) {
 		super(registeredAdminId);
 		this.registeredAdminId = registeredAdminId;
+		this.registeredAdminEmail = registeredAdminEmail;
 	}
 
-	public UUID getCreatedAdminId() {
+	public UUID getRegisteredAdminId() {
 		return registeredAdminId;
 	}
+
+	public String getRegisteredAdminEmail() {
+		return registeredAdminEmail;
+	}
+	
 }

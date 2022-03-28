@@ -1,5 +1,6 @@
 package com.kaliente.pos.domain.useraggregate;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class User  extends BaseEntity implements AggregateRoot {
           name = "user_id", referencedColumnName = "id"), 
         inverseJoinColumns = @JoinColumn(
           name = "role_id", referencedColumnName = "id")) 
-    private Collection<Role> roles;
+    private Collection<Role> roles = new ArrayList<Role>();
 	
 	
 	

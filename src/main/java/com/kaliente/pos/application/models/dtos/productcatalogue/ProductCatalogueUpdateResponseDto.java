@@ -8,7 +8,6 @@ public class ProductCatalogueUpdateResponseDto extends BaseResponse<UUID> {
 
 	public ProductCatalogueUpdateResponseDto(UUID payload) {
 		super(payload);
-		// TODO Auto-generated constructor stub
 	}
 
 }

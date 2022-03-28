@@ -8,7 +8,6 @@ public class ProductDeleteResponseDto extends BaseResponse<UUID> {
 
 	public ProductDeleteResponseDto(UUID data) {
 		super(data);
-		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -8,7 +8,6 @@ public class GetAllProductCataloguesResponseDto extends BaseResponse<List<Produc
 
 	public GetAllProductCataloguesResponseDto(List<ProductCatalogueDetailsDto> payload) {
 		super(payload);
-		// TODO Auto-generated constructor stub
 	}
 
 }
