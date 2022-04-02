@@ -40,35 +40,20 @@ public class ProductCatalogueService {
 		public UUID createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
 			ProductCatalogue newProductCatalogue = modelMapper.map(dto, ProductCatalogue.class);
 			
-			UUID parentCatalogueId = dto.getParentCatalogueId();
-			if(parentCatalogueId != null) {
-				Optional<ProductCatalogue> parent = catalogueRepository.findById(parentCatalogueId);
-				if(parent != null) {
-					newProductCatalogue.setParentCatalogue(parent.get());
-				}
-			}
-			
 			var createdProduct = this.catalogueRepository.save(newProductCatalogue);
 			return createdProduct.getId();
 		}
 		
 		public UUID updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
-//			Optional<ProductCatalogue> productToUpdate = this.catalogueRepository.findById(dto.getId());
-//			if(productToUpdate.isEmpty()) return null;
-//			
-//			productToUpdate.get().setTitle(dto.getTitle());
-//			productToUpdate.get().setDescription(dto.getDescription());
-//			
-//			var updatedProduct = this.catalogueRepository.save(productToUpdate.get());
 			
 			this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription());
 			
 			return dto.getId();
 		}
 		
-		public int deleteProductCatalogue(UUID catalogueId) {
+		public UUID deleteProductCatalogue(UUID catalogueId) {
 			this.catalogueRepository.deleteById(catalogueId);
-			return 1;
+			return catalogueId;
 		}
 	
 	

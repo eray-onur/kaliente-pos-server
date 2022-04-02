@@ -2,12 +2,19 @@ package com.kaliente.pos.application.models.dtos.productcatalogue;
 
 import java.util.UUID;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class ProductCatalogueAddResponseDto extends BaseResponse<UUID> {
-
-	public ProductCatalogueAddResponseDto(UUID payload) {
-		super(payload);
+public class ProductCatalogueAddResponseDto {
+	UUID addedCatalogueId;
+	public ProductCatalogueAddResponseDto(UUID addedCatalogueId) {
+		this.addedCatalogueId = addedCatalogueId;
 	}
+	public UUID getAddedCatalogueId() {
+		return addedCatalogueId;
+	}
+	public void setAddedCatalogueId(UUID addedCatalogueId) {
+		this.addedCatalogueId = addedCatalogueId;
+	}
+
+	
 
 }

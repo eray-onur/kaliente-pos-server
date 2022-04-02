@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kaliente.pos.application.models.base.BaseResponse;
 import com.kaliente.pos.application.models.dtos.productcatalogue.GetAllProductCataloguesResponseDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.GetProductCatalogueByIdResponseDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueAddRequestDto;
@@ -24,6 +25,7 @@ import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogu
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateRequestDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateResponseDto;
 import com.kaliente.pos.application.services.ProductCatalogueService;
+import com.kaliente.pos.sharedkernel.Constants;
 
 @RestController @RequestMapping("/product_catalogue")
 public class ProductCatalogueController {
@@ -33,52 +35,52 @@ public class ProductCatalogueController {
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getById/{id}")
-	public ResponseEntity<GetProductCatalogueByIdResponseDto> getById(@PathVariable("id") UUID id) {
+	public ResponseEntity<BaseResponse<GetProductCatalogueByIdResponseDto>> getById(@PathVariable("id") UUID id) {
 		
 		ProductCatalogueDetailsDto productCatalogue = this.productCatalogueService.getProductCatalogueById(id);
 		var response = new GetProductCatalogueByIdResponseDto(productCatalogue);
 		
-		return new ResponseEntity<GetProductCatalogueByIdResponseDto>(response, HttpStatus.OK);
+		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 		
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@GetMapping("/getAll")
-	public ResponseEntity<GetAllProductCataloguesResponseDto> getAll() {
+	public ResponseEntity<BaseResponse<GetAllProductCataloguesResponseDto>> getAll() {
 		
 		List<ProductCatalogueDetailsDto> productCatalogues = this.productCatalogueService.getAllCatalogues();
 		var response = new GetAllProductCataloguesResponseDto(productCatalogues);
 		
-		return new ResponseEntity<GetAllProductCataloguesResponseDto>(response, HttpStatus.OK);
+		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PostMapping("/add")
-	public ResponseEntity<ProductCatalogueAddResponseDto> addNewCatalogue(@RequestBody ProductCatalogueAddRequestDto dto) {
+	public ResponseEntity<BaseResponse<ProductCatalogueAddResponseDto>> addNewCatalogue(@RequestBody ProductCatalogueAddRequestDto dto) {
 		
 		var result = productCatalogueService.createNewProductCatalogue(dto);
 		var response = new ProductCatalogueAddResponseDto(result);
 		
-		return new ResponseEntity<ProductCatalogueAddResponseDto>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 		
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PutMapping("/update")
-	public ResponseEntity<ProductCatalogueUpdateResponseDto> updateCatalogue(@RequestBody ProductCatalogueUpdateRequestDto dto) {
+	public ResponseEntity<BaseResponse<ProductCatalogueUpdateResponseDto>> updateCatalogue(@RequestBody ProductCatalogueUpdateRequestDto dto) {
 		
 		var result = this.productCatalogueService.updateProductCatalogue(dto);
 		var response = new ProductCatalogueUpdateResponseDto(result);
 		
-		return new ResponseEntity<ProductCatalogueUpdateResponseDto>(response, HttpStatus.CREATED);
+		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 		
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteCatalogue(@PathVariable("id") UUID id) {
-		this.productCatalogueService.deleteProductCatalogue(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<BaseResponse<?>> deleteCatalogue(@PathVariable("id") UUID id) {
+		var result = this.productCatalogueService.deleteProductCatalogue(id);
+		return new ResponseEntity<>(new BaseResponse<UUID>(result, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 	}
 	
 }

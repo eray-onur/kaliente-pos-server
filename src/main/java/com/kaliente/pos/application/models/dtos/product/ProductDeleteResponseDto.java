@@ -2,12 +2,19 @@ package com.kaliente.pos.application.models.dtos.product;
 
 import java.util.UUID;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class ProductDeleteResponseDto extends BaseResponse<UUID> {
-
-	public ProductDeleteResponseDto(UUID data) {
-		super(data);
+public class ProductDeleteResponseDto  {
+	UUID deletedProductId;
+	public ProductDeleteResponseDto(UUID deletedProductId) {
+		this.deletedProductId = deletedProductId;
 	}
+	public UUID getDeletedProductId() {
+		return deletedProductId;
+	}
+	public void setDeletedProductId(UUID deletedProductId) {
+		this.deletedProductId = deletedProductId;
+	}
+
+	
 
 }

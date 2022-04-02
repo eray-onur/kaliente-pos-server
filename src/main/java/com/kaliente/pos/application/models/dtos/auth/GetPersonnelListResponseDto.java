@@ -2,9 +2,8 @@ package com.kaliente.pos.application.models.dtos.auth;
 
 import java.util.List;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class GetPersonnelListResponseDto extends BaseResponse<List<PersonnelDetailsDto>> {
+public class GetPersonnelListResponseDto {
 	private List<PersonnelDetailsDto> foundPersonnel;
 	
 
@@ -13,7 +12,6 @@ public class GetPersonnelListResponseDto extends BaseResponse<List<PersonnelDeta
 	}
 
 	public GetPersonnelListResponseDto(List<PersonnelDetailsDto> foundPersonnel) {
-		super(foundPersonnel);
 		this.foundPersonnel = foundPersonnel;
 	}
 }

@@ -1,11 +1,16 @@
 package com.kaliente.pos.application.models.dtos.productcatalogue;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class GetProductCatalogueByIdResponseDto extends BaseResponse<ProductCatalogueDetailsDto> {
-
-	public GetProductCatalogueByIdResponseDto(ProductCatalogueDetailsDto payload) {
-		super(payload);
+public class GetProductCatalogueByIdResponseDto {
+	ProductCatalogueDetailsDto product;
+	public GetProductCatalogueByIdResponseDto(ProductCatalogueDetailsDto product) {
+		this.product = product;
+	}
+	public ProductCatalogueDetailsDto getProduct() {
+		return product;
+	}
+	public void setProduct(ProductCatalogueDetailsDto product) {
+		this.product = product;
 	}
 
 }

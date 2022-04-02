@@ -2,12 +2,23 @@ package com.kaliente.pos.application.models.dtos.productcatalogue;
 
 import java.util.List;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class GetAllProductCataloguesResponseDto extends BaseResponse<List<ProductCatalogueDetailsDto>> {
+public class GetAllProductCataloguesResponseDto {
 
-	public GetAllProductCataloguesResponseDto(List<ProductCatalogueDetailsDto> payload) {
-		super(payload);
+	List<ProductCatalogueDetailsDto> productCatalogues;
+
+	public GetAllProductCataloguesResponseDto(List<ProductCatalogueDetailsDto> productCatalogues) {
+		this.productCatalogues = productCatalogues;
 	}
+
+	public List<ProductCatalogueDetailsDto> getProductCatalogues() {
+		return productCatalogues;
+	}
+
+	public void setProductCatalogues(List<ProductCatalogueDetailsDto> productCatalogues) {
+		this.productCatalogues = productCatalogues;
+	}
+
+	
 
 }

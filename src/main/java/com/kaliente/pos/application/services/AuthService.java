@@ -1,8 +1,6 @@
 package com.kaliente.pos.application.services;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,6 +9,7 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kaliente.pos.domain.useraggregate.User;
@@ -36,6 +35,9 @@ public class AuthService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 
     @Autowired
@@ -71,6 +73,9 @@ public class AuthService {
 	@Transactional
 	public RegisterAdminResponseDto registerAdmin(RegisterAdminRequestDto dto) {
 		User adminToRegister = modelMapper.map(dto, User.class);
+		adminToRegister.setPassword(
+			passwordEncoder.encode(adminToRegister.getPassword())
+		);
 
 		Role adminRole = this.roleRepository.findByTitle("ROLE_ADMIN");
 		adminToRegister.getRoles().add(adminRole);
@@ -83,6 +88,10 @@ public class AuthService {
 	@Transactional
 	public RegisterPersonnelResponseDto registerPersonnel(RegisterPersonnelRequestDto dto) {
 		User personnelToRegister = modelMapper.map(dto, User.class);
+		personnelToRegister.setPassword(
+			passwordEncoder.encode(personnelToRegister.getPassword())
+		);
+
 
 		Role personnelRole = this.roleRepository.findByTitle("ROLE_PERSONNEL");
 		personnelToRegister.getRoles().add(personnelRole);
@@ -90,6 +99,7 @@ public class AuthService {
 
 
 		User registeredUser = userRepository.save(personnelToRegister);
+
 		return new RegisterPersonnelResponseDto(registeredUser.getId(), registeredUser.getEmail());
 	}
 	

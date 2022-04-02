@@ -1,9 +1,10 @@
 package com.kaliente.pos.application.models.base;
 
+import java.io.Serializable;
 
-public class BaseResponse<T> {
-	private String message;
-	private T payload;
+public class BaseResponse<T> implements Serializable {
+	String message;
+	T payload;
 	
 	public BaseResponse(T payload) {
 		super();
@@ -24,12 +25,14 @@ public class BaseResponse<T> {
 		this.message = message;
 	}
 
-	public T getPayload() {
+	public Object getPayload() {
 		return payload;
 	}
 
 	public void setPayload(T payload) {
 		this.payload = payload;
 	}
+
+	
 	
 }

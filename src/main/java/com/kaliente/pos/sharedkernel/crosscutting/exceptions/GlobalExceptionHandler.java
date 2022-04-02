@@ -19,6 +19,6 @@ public class GlobalExceptionHandler
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<?>> globalExceptionHandler(Exception ex, WebRequest request) {
-      return new ResponseEntity<BaseResponse<?>>(new BaseResponse<String>(null, ex.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<BaseResponse<?>>(new BaseResponse<>(null, ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,11 +1,21 @@
 package com.kaliente.pos.application.models.dtos.auth;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class AuthenticationResponseDto extends BaseResponse<String> {
+public class AuthenticationResponseDto {
+
+	String jwt;
 
 	public AuthenticationResponseDto(String jwt) {
-		super(jwt);
+		this.jwt = jwt;	
 	}
 
+	public String getJwt() {
+		return jwt;
+	}
+
+	public void setJwt(String jwt) {
+		this.jwt = jwt;
+	}
+
+	
 }

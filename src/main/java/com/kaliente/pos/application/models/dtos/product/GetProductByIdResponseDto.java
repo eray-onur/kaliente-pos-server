@@ -1,11 +1,18 @@
 package com.kaliente.pos.application.models.dtos.product;
 
-import com.kaliente.pos.application.models.base.BaseResponse;
 
-public class GetProductByIdResponseDto extends BaseResponse<ProductDetailsDto> {
-
-	public GetProductByIdResponseDto(ProductDetailsDto payload) {
-		super(payload);
+public class GetProductByIdResponseDto {
+	ProductDetailsDto product;
+	public GetProductByIdResponseDto(ProductDetailsDto product) {
+		this.product = product;
 	}
+	public ProductDetailsDto getProduct() {
+		return product;
+	}
+	public void setProduct(ProductDetailsDto product) {
+		this.product = product;
+	}
+
+	
 
 }

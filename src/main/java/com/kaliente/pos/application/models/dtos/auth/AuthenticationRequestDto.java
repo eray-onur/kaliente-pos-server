@@ -2,7 +2,7 @@ package com.kaliente.pos.application.models.dtos.auth;
 
 public class AuthenticationRequestDto {
 	private String email;
-	private String username;
+	// private String username;
 	private String password;
 	
 	public AuthenticationRequestDto() {
@@ -11,7 +11,7 @@ public class AuthenticationRequestDto {
 	
 	public AuthenticationRequestDto(String email, String username, String password) {
 		this.email = email;
-		this.username = username;
+		// this.username = username;
 		this.password = password;
 	}
 	
@@ -22,12 +22,12 @@ public class AuthenticationRequestDto {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
+	// public String getUsername() {
+	// 	return username;
+	// }
+	// public void setUsername(String username) {
+	// 	this.username = username;
+	// }
 	public String getPassword() {
 		return password;
 	}
