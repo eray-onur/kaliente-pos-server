@@ -38,8 +38,8 @@ public class ProductController {
 	@GetMapping("/getById/{id}")
 	public ResponseEntity<BaseResponse<GetProductByIdResponseDto>> getById(@PathVariable("id") UUID id) {
 		
-		ProductDetailsDto product = this.productService.getProductById(id);
-		var response = new GetProductByIdResponseDto(product);
+		ProductDetailsDto foundProduct = this.productService.getProductById(id);
+		var response = new GetProductByIdResponseDto(foundProduct);
 		
 		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 	}

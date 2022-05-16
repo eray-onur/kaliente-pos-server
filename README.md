@@ -4,7 +4,7 @@
    `./mvnw package`
    *or* 
    (Skipping tests is recommended if database is coupled with API) 
-   `./mvnw package-DskipTests`
+   `./mvnw package -DskipTests`
 
 2. Rebuild docker image
     `docker build --build-arg JAR_FILE=target/*.jar -t kalientepos/webapi:latest .`

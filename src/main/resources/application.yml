@@ -12,7 +12,7 @@ spring:
   # Database
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgresdb:5432/kalientedb
+    url: jdbc:postgresql://localhost:5432/kalientedb
     username: postgres
     password: anan123
   # JPA properties

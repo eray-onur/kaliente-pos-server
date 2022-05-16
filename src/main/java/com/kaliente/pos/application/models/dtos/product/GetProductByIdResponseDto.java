@@ -2,15 +2,15 @@ package com.kaliente.pos.application.models.dtos.product;
 
 
 public class GetProductByIdResponseDto {
-	ProductDetailsDto product;
-	public GetProductByIdResponseDto(ProductDetailsDto product) {
-		this.product = product;
+	ProductDetailsDto foundProduct;
+	public GetProductByIdResponseDto(ProductDetailsDto foundProduct) {
+		this.foundProduct = foundProduct;
 	}
-	public ProductDetailsDto getProduct() {
-		return product;
+	public ProductDetailsDto getFoundProduct() {
+		return foundProduct;
 	}
-	public void setProduct(ProductDetailsDto product) {
-		this.product = product;
+	public void setFoundProduct(ProductDetailsDto foundProduct) {
+		this.foundProduct = foundProduct;
 	}
 
 	

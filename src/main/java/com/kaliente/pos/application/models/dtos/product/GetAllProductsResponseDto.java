@@ -5,18 +5,18 @@ import java.util.List;
 
 public class GetAllProductsResponseDto {
 
-	List<ProductDetailsDto> products;
+	List<ProductDetailsDto> foundProducts;
 
-	public GetAllProductsResponseDto(List<ProductDetailsDto> products) {
-		this.products = products;
+	public GetAllProductsResponseDto(List<ProductDetailsDto> foundProducts) {
+		this.foundProducts = foundProducts;
 	}
 
 	public List<ProductDetailsDto> getProducts() {
-		return products;
+		return foundProducts;
 	}
 
-	public void setProducts(List<ProductDetailsDto> products) {
-		this.products = products;
+	public void setProducts(List<ProductDetailsDto> foundProducts) {
+		this.foundProducts = foundProducts;
 	}
 
 	

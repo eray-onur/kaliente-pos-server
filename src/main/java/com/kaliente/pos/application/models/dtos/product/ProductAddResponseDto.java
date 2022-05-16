@@ -5,9 +5,11 @@ import java.util.UUID;
 
 public class ProductAddResponseDto {
 	UUID addedProductId;
+
 	public ProductAddResponseDto(UUID addedProductId) {
 		this.addedProductId = addedProductId;
 	}
+	
 	public UUID getAddedProductId() {
 		return addedProductId;
 	}
