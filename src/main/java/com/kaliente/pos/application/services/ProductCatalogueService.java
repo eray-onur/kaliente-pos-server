@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueAddRequestDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateRequestDto;
+import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 
@@ -39,14 +40,35 @@ public class ProductCatalogueService {
 		
 		public UUID createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
 			ProductCatalogue newProductCatalogue = modelMapper.map(dto, ProductCatalogue.class);
+
+			if(dto.getParentCatalogueId() != null)
+			{
+				Optional<ProductCatalogue> foundParentCandidate = this.catalogueRepository.findById(dto.getParentCatalogueId());
+				newProductCatalogue.setParentCatalogue(foundParentCandidate.get());
+			}
+
 			
-			var createdProduct = this.catalogueRepository.save(newProductCatalogue);
-			return createdProduct.getId();
+			var createdProductCatalogue = this.catalogueRepository.save(newProductCatalogue);
+			return createdProductCatalogue.getId();
 		}
 		
 		public UUID updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
+
+
+			if (dto.getParentCatalogueId() != null) {
+				Optional<ProductCatalogue> parentCatalogue = this.catalogueRepository
+						.findById(dto.getParentCatalogueId());
+				this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription(),
+						parentCatalogue.get());
+			} else {
+				this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription(),
+						null);
+			}
+
 			
-			this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription());
+
+			// this.catalogueRepository.save(catalogueToUpdate);
+
 			
 			return dto.getId();
 		}

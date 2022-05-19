@@ -1,6 +1,7 @@
 package com.kaliente.pos.application.models;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 
 import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
@@ -28,7 +29,15 @@ public class ApplicationModelMapper {
 		mapper.createTypeMap(Product.class, ProductUpdateRequestDto.class);
 		mapper.createTypeMap(Product.class, ProductDetailsDto.class);
 		mapper.createTypeMap(Product.class, ProductCreateDto.class);
-		mapper.createTypeMap(ProductCatalogue.class, ProductCatalogueDetailsDto.class);
+
+		mapper
+		.createTypeMap(ProductCatalogue.class, ProductCatalogueDetailsDto.class);
+		
+		// PropertyMap<ProductCatalogueDetailsDto, ProductCatalogue> catalogueMap = new PropertyMap<ProductCatalogueDetailsDto, ProductCatalogue> () {
+		// 	protected void configure() {
+		// 		map().setParentCatalogue(source.getParentCatalogueId());
+		// 	}
+		// }
 	}
 	
 }
