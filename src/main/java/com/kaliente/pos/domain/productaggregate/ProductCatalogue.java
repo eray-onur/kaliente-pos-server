@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -22,6 +23,7 @@ public class ProductCatalogue extends BaseEntity {
 	private List<Product> products = new ArrayList<Product>();
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = true)
+	@JoinColumn(name = "parent_catalogue_id", nullable = true)
 	private ProductCatalogue parentCatalogue;
 	
 	@OneToMany(mappedBy="parentCatalogue")

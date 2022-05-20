@@ -9,8 +9,10 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProductCatalogueRepository extends JpaRepository<ProductCatalogue, UUID> {
+
 	@Transactional
 	@Modifying 
 	@Query("UPDATE product_catalogues pc SET pc.title = :title, pc.description = :description, pc.parentCatalogue=:parentCatalogue where pc.id = :id")
 	void updateCatalogue(UUID id, String title, String description, ProductCatalogue parentCatalogue);
+	
 }

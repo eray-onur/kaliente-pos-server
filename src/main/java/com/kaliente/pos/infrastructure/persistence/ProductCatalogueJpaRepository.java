@@ -4,12 +4,12 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-
-import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
-import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.hibernate.Session;
+
+import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
+
 
 @Service
 public class ProductCatalogueJpaRepository {
@@ -38,7 +38,8 @@ public class ProductCatalogueJpaRepository {
 
     @Transactional
     public ProductCatalogue updateProductCatalogue(UUID catalogueId, String title, String description, UUID parentCatalogueId) {
-        
+        // Session session = em.unwrap(Session.class);
+
         ProductCatalogue foundCatalogue = em.find(ProductCatalogue.class, catalogueId);
         foundCatalogue.setTitle(title);
         foundCatalogue.setDescription(description);

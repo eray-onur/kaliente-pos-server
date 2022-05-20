@@ -1,5 +1,6 @@
 package com.kaliente.pos.api.controllers;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,7 +58,7 @@ public class ProductCatalogueController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PostMapping("/add")
 	public ResponseEntity<BaseResponse<ProductCatalogueAddResponseDto>> addNewCatalogue(@RequestBody ProductCatalogueAddRequestDto dto) {
-		
+
 		var result = productCatalogueService.createNewProductCatalogue(dto);
 		var response = new ProductCatalogueAddResponseDto(result);
 		
@@ -68,7 +69,8 @@ public class ProductCatalogueController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PutMapping("/update")
 	public ResponseEntity<BaseResponse<ProductCatalogueUpdateResponseDto>> updateCatalogue(@RequestBody ProductCatalogueUpdateRequestDto dto) {
-		
+		if(dto.getId() == dto.getParentCatalogueId())
+			throw new InvalidParameterException("A catalogue cannot be its own parent!");
 		var result = this.productCatalogueService.updateProductCatalogue(dto);
 		var response = new ProductCatalogueUpdateResponseDto(result);
 		
