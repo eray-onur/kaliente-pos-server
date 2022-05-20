@@ -14,15 +14,19 @@ import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogu
 import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
+import com.kaliente.pos.infrastructure.persistence.ProductCatalogueJpaRepository;
 
 @Service
 public class ProductCatalogueService {
 	
 	@Autowired
 	private ProductCatalogueRepository catalogueRepository;
+
+	@Autowired
+	private ProductCatalogueJpaRepository catalogueJpaRepository;
 	
-	 @Autowired
-	    private ModelMapper modelMapper;
+	@Autowired
+	private ModelMapper modelMapper;
 		
 		
 		public ProductCatalogueDetailsDto getProductCatalogueById(UUID catalogueId) {
@@ -39,38 +43,20 @@ public class ProductCatalogueService {
 		}
 		
 		public UUID createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
-			ProductCatalogue newProductCatalogue = modelMapper.map(dto, ProductCatalogue.class);
-
-			if(dto.getParentCatalogueId() != null)
-			{
-				Optional<ProductCatalogue> foundParentCandidate = this.catalogueRepository.findById(dto.getParentCatalogueId());
-				newProductCatalogue.setParentCatalogue(foundParentCandidate.get());
-			}
-
 			
-			var createdProductCatalogue = this.catalogueRepository.save(newProductCatalogue);
+			var createdProductCatalogue = this.catalogueJpaRepository.addProductCatalogue(dto.getTitle(), dto.getDescription(), dto.getParentCatalogueId());
 			return createdProductCatalogue.getId();
 		}
 		
 		public UUID updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
-
-
-			if (dto.getParentCatalogueId() != null) {
-				Optional<ProductCatalogue> parentCatalogue = this.catalogueRepository
-						.findById(dto.getParentCatalogueId());
-				this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription(),
-						parentCatalogue.get());
-			} else {
-				this.catalogueRepository.updateCatalogue(dto.getId(), dto.getTitle(), dto.getDescription(),
-						null);
-			}
-
+			var createdProductCatalogue = this.catalogueJpaRepository.updateProductCatalogue(
+				dto.getId(), 
+				dto.getTitle(),
+				dto.getDescription(), 
+				dto.getParentCatalogueId()
+			);
 			
-
-			// this.catalogueRepository.save(catalogueToUpdate);
-
-			
-			return dto.getId();
+			return createdProductCatalogue.getId();
 		}
 		
 		public UUID deleteProductCatalogue(UUID catalogueId) {

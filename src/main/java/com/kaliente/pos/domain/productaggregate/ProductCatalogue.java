@@ -27,6 +27,15 @@ public class ProductCatalogue extends BaseEntity {
 	@OneToMany(mappedBy="parentCatalogue")
 	private List<ProductCatalogue> subcatalogues = new ArrayList<>();
 
+	public ProductCatalogue() {
+		
+	}
+
+	public ProductCatalogue(String title, String description) {
+		this.title = title;
+		this.description = description;
+	}
+
 
 	public String getTitle() {
 		return title;
