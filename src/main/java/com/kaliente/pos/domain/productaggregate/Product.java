@@ -4,6 +4,7 @@ package com.kaliente.pos.domain.productaggregate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,8 +22,16 @@ public class Product extends BaseEntity implements AggregateRoot {
 	private String description;
 	@Column
 	private double price;
+
+	public Product() {}
+
+	public Product(String title, String description, double price) {
+		this.title = title;
+		this.description = description;
+		this.price = price;
+	}
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name="catalogue_id", nullable = true)
 	private ProductCatalogue catalogue;
 

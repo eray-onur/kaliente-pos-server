@@ -41,7 +41,7 @@ public class ProductCatalogueController {
 		ProductCatalogueDetailsDto productCatalogue = this.productCatalogueService.getProductCatalogueById(id);
 		var response = new GetProductCatalogueByIdResponseDto(productCatalogue);
 		
-		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+		return new ResponseEntity<>(new BaseResponse<GetProductCatalogueByIdResponseDto>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 		
 	}
 

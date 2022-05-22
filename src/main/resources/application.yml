@@ -17,9 +17,12 @@ spring:
     password: anan123
   # JPA properties
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update # When you launch the application for the first time - switch "none" at "create"
-      enable_lazy_load_no_trans: true #
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect

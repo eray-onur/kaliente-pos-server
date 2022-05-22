@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.kaliente.pos.api.filters.JwtRequestFilter;
 import com.kaliente.pos.domain.useraggregate.UserRepository;
+import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
 
 @Configuration
 @EnableAutoConfiguration
@@ -32,13 +33,16 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private UserJpaRepository userJpaRepository;
 	
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userRepository);
+		auth.userDetailsService(userJpaRepository);
 	}
 	
 	

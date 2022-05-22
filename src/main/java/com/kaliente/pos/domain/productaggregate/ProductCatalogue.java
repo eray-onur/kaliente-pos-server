@@ -19,7 +19,7 @@ public class ProductCatalogue extends BaseEntity {
 	private String title;
 	private String description;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="catalogue")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="catalogue")
 	private List<Product> products = new ArrayList<Product>();
 	
 	@ManyToOne(fetch=FetchType.LAZY, optional = true)

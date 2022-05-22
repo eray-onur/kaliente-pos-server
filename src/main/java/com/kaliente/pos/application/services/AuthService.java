@@ -1,6 +1,7 @@
 package com.kaliente.pos.application.services;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.kaliente.pos.domain.useraggregate.User;
 import com.kaliente.pos.domain.useraggregate.UserRepository;
+import com.kaliente.pos.infrastructure.persistence.RoleJpaRepository;
+import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
 import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterAdminResponseDto;
@@ -31,10 +34,10 @@ public class AuthService {
 	private JwtUtil jwtTokenUtil;
 	
 	@Autowired
-	private UserRepository userRepository;
+	private UserJpaRepository userRepository;
 	
 	@Autowired
-	private RoleRepository roleRepository;
+	private RoleJpaRepository roleRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -44,7 +47,7 @@ public class AuthService {
     private ModelMapper modelMapper;
     
     public List<PersonnelDetailsDto> getPersonnelList() {
-    	List<User> foundPersonnel = userRepository.findAll();
+    	Collection<User> foundPersonnel = userRepository.findAllUsers();
     	
     	List<PersonnelDetailsDto> personnelList = foundPersonnel.stream().map(element -> modelMapper.map(element, PersonnelDetailsDto.class)).collect(Collectors.toList());
     	

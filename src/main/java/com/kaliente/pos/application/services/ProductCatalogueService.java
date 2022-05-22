@@ -1,7 +1,7 @@
 package com.kaliente.pos.application.services;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -11,16 +11,12 @@ import org.springframework.stereotype.Service;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueAddRequestDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateRequestDto;
-import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
-import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 import com.kaliente.pos.infrastructure.persistence.ProductCatalogueJpaRepository;
 
 @Service
 public class ProductCatalogueService {
 	
-	@Autowired
-	private ProductCatalogueRepository catalogueRepository;
 
 	@Autowired
 	private ProductCatalogueJpaRepository catalogueJpaRepository;
@@ -30,15 +26,17 @@ public class ProductCatalogueService {
 		
 		
 		public ProductCatalogueDetailsDto getProductCatalogueById(UUID catalogueId) {
-			Optional<ProductCatalogue> product =  this.catalogueRepository.findById(catalogueId);
-			if(product.isEmpty()) {
+			ProductCatalogue productCatalogue =  this.catalogueJpaRepository.getProductCatalogueById(catalogueId);
+			if(productCatalogue == null) {
 				return null;
 			}
-			return modelMapper.map(product.get(), ProductCatalogueDetailsDto.class);
+			return modelMapper.map(productCatalogue, ProductCatalogueDetailsDto.class);
 		}
 		
 		public List<ProductCatalogueDetailsDto> getAllCatalogues() {
-			List<ProductCatalogue> productCatalogues = this.catalogueRepository.findAll();
+			// List<ProductCatalogue> productCatalogues = this.catalogueRepository.findAll();
+
+			Collection<ProductCatalogue> productCatalogues = this.catalogueJpaRepository.getProductCatalogues();
 			return productCatalogues.stream().map(p -> modelMapper.map(p, ProductCatalogueDetailsDto.class)).toList();
 		}
 		
@@ -55,13 +53,20 @@ public class ProductCatalogueService {
 				dto.getDescription(), 
 				dto.getParentCatalogueId()
 			);
+
+			if(createdProductCatalogue != null)
+				return createdProductCatalogue.getId();
+
+			return null;
 			
-			return createdProductCatalogue.getId();
 		}
 		
 		public UUID deleteProductCatalogue(UUID catalogueId) {
-			this.catalogueRepository.deleteById(catalogueId);
-			return catalogueId;
+			var result = this.catalogueJpaRepository.archiveProductCatalogue(catalogueId);
+			if(result)
+				return catalogueId;
+
+			return null;
 		}
 	
 	
