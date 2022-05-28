@@ -19,6 +19,12 @@ public class AdministrationService {
     @Autowired
     RoleJpaRepository roleJpaRepository;
 
+    public User getPersonnelById(UUID id) throws Exception {
+        User user = this.userJpaRepository.findById(id);
+
+        return user;
+    }
+
     @Transactional
     public UUID removePersonnel(String email) throws Exception {
         User user = this.userJpaRepository.findByEmail(email);
