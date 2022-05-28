@@ -3,6 +3,7 @@ package com.kaliente.pos.infrastructure.persistence;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
@@ -13,14 +14,12 @@ import com.kaliente.pos.domain.useraggregate.User;
 import com.kaliente.pos.domain.useraggregate.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import antlr.collections.List;
 
 @Repository
 public class UserJpaRepository implements UserDetailsService, UserRepository {
@@ -53,8 +52,16 @@ public class UserJpaRepository implements UserDetailsService, UserRepository {
         // return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
+    public User findById(UUID userId) {
+        Query findUserQuery = em.createQuery("SELECT u from users u WHERE u.id=:userId and u.isActive = true", User.class);
+        findUserQuery.setParameter("userId", userId);
+
+        User foundUser = (User) findUserQuery.getSingleResult();
+        return foundUser;
+    }
+
     public User findByEmail(String email) {
-        Query findUserQuery = em.createQuery("SELECT u from users u WHERE u.email=:email",User.class);
+        Query findUserQuery = em.createQuery("SELECT u from users u WHERE u.email=:email and u.isActive = true",User.class);
         findUserQuery.setParameter("email", email);
 
         User foundUser = (User) findUserQuery.getSingleResult();
@@ -63,7 +70,7 @@ public class UserJpaRepository implements UserDetailsService, UserRepository {
 
     @Override
     public User findByUserName(String username) {
-        Query findUserQuery = em.createQuery("SELECT u from users u WHERE u.userName=:username", User.class);
+        Query findUserQuery = em.createQuery("SELECT u from users u WHERE u.userName=:username and u.isActive = true", User.class);
         findUserQuery.setParameter("username", username);
 
         User foundUser = (User) findUserQuery.getSingleResult();
@@ -73,7 +80,7 @@ public class UserJpaRepository implements UserDetailsService, UserRepository {
     @Override
     public Collection<User> findAllUsers() {
         
-        Collection<User> foundCatalogue = em.createQuery("FROM users",User.class).getResultList();
+        Collection<User> foundCatalogue = em.createQuery("FROM users u WHERE u.isActive = true",User.class).getResultList();
 
         return foundCatalogue;
 
@@ -84,6 +91,30 @@ public class UserJpaRepository implements UserDetailsService, UserRepository {
     public User save(User user) {
         em.setFlushMode(FlushModeType.COMMIT);
         return em.merge(user);
+    }
+
+    public boolean archiveUser(UUID userId) {
+        Query archiveQuery = em.createQuery("UPDATE users SET isActive = false WHERE id = :userId");
+        archiveQuery.setParameter("userId", userId);
+
+        int result = archiveQuery.executeUpdate();
+
+        if (result > 0)
+            return true;
+
+        return false;
+    }
+
+    public boolean archiveUserByEmail(String email) {
+        Query archiveQuery = em.createQuery("UPDATE users SET isActive = false WHERE email = :email");
+        archiveQuery.setParameter("email", email);
+
+        int result = archiveQuery.executeUpdate();
+
+        if (result > 0)
+            return true;
+
+        return false;
     }
     
 }

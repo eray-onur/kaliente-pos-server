@@ -1,9 +1,7 @@
 package com.kaliente.pos.domain.useraggregate;
 
 import java.util.Collection;
-import java.util.Set;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 

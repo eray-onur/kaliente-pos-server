@@ -10,7 +10,6 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.hibernate.Session;
 
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;

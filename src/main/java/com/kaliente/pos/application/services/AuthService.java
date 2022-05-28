@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kaliente.pos.domain.useraggregate.User;
-import com.kaliente.pos.domain.useraggregate.UserRepository;
 import com.kaliente.pos.infrastructure.persistence.RoleJpaRepository;
 import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
 import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
@@ -24,7 +23,6 @@ import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto
 import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelResponseDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterRequestDto;
 import com.kaliente.pos.domain.useraggregate.Role;
-import com.kaliente.pos.domain.useraggregate.RoleRepository;
 import com.kaliente.pos.sharedkernel.util.JwtUtil;
 
 @Service

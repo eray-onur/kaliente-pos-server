@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +27,7 @@ public class ProductJpaRepository {
     public Product getProductById(UUID productId) {
 
         var getByIdQuery = em.createQuery(
-                "FROM products p left join fetch p.catalogue pc WHERE p.isActive = true and p.id = :productId",
+                "FROM products p left join fetch p.catalogue pc WHERE p.isActive = true and p.id = :productId and p.isActive = true",
                 Product.class);
 
         getByIdQuery.setParameter("productId", productId);
