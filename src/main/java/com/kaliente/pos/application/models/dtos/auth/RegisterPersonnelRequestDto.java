@@ -1,11 +1,20 @@
 package com.kaliente.pos.application.models.dtos.auth;
 
+import java.util.UUID;
+
 public class RegisterPersonnelRequestDto {
+	private UUID roleId;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
 	
+	public UUID getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(UUID roleId) {
+		this.roleId = roleId;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

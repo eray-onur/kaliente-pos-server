@@ -1,5 +1,6 @@
 package com.kaliente.pos.application.services;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -19,6 +20,10 @@ public class AdministrationService {
     @Autowired
     RoleJpaRepository roleJpaRepository;
 
+    public ArrayList<Role> getSystemRoles() throws Exception {
+        return this.roleJpaRepository.findAllSystemRoles();
+    }
+
     public User getPersonnelById(UUID id) throws Exception {
         User user = this.userJpaRepository.findById(id);
 
@@ -26,7 +31,7 @@ public class AdministrationService {
     }
 
     @Transactional
-    public UUID removePersonnel(String email) throws Exception {
+    public User removePersonnel(String email) throws Exception {
         User user = this.userJpaRepository.findByEmail(email);
         Role rolePersonnel = this.roleJpaRepository.findByTitle("ROLE_PERSONNEL");
 
@@ -44,6 +49,6 @@ public class AdministrationService {
             return null;
         }
 
-        return user.getId();
+        return user;
     }
 }

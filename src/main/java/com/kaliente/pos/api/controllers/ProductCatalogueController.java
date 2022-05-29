@@ -60,7 +60,7 @@ public class ProductCatalogueController {
 	public ResponseEntity<BaseResponse<ProductCatalogueAddResponseDto>> addNewCatalogue(@RequestBody ProductCatalogueAddRequestDto dto) {
 
 		var result = productCatalogueService.createNewProductCatalogue(dto);
-		var response = new ProductCatalogueAddResponseDto(result);
+		var response = new ProductCatalogueAddResponseDto(result.getId(), result.getTitle());
 		
 		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 		
@@ -69,10 +69,12 @@ public class ProductCatalogueController {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_PERSONNEL')")
 	@PutMapping("/update")
 	public ResponseEntity<BaseResponse<ProductCatalogueUpdateResponseDto>> updateCatalogue(@RequestBody ProductCatalogueUpdateRequestDto dto) {
+		
 		if(dto.getId() == dto.getParentCatalogueId())
 			throw new InvalidParameterException("A catalogue cannot be its own parent!");
+
 		var result = this.productCatalogueService.updateProductCatalogue(dto);
-		var response = new ProductCatalogueUpdateResponseDto(result);
+		var response = new ProductCatalogueUpdateResponseDto(result.getId(), result.getTitle());
 		
 		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 		

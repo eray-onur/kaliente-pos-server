@@ -20,9 +20,6 @@ public class ProductService {
 
 	@Autowired
 	private ProductJpaRepository productJpaRepository;
-//	@Autowired
-//	private ProductCatalogueRepository productCatalogueRepository;
-	
 
     @Autowired
     private ModelMapper modelMapper;
@@ -41,19 +38,19 @@ public class ProductService {
 		return products.stream().map(p -> modelMapper.map(p, ProductDetailsDto.class)).toList();
 	}
 	
-	public UUID createNewProduct(ProductAddRequestDto dto) {
+	public Product createNewProduct(ProductAddRequestDto dto) {
 		// Product newProduct = modelMapper.map(dto, Product.class);
 		// newProduct.setCatalogue(newProduct.getCatalogue());
 
 		var result = this.productJpaRepository.addProduct(dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getCatalogueId());
 		
 		// var result = this.productRepository.save(newProduct);
-		return result.getId();
+		return result;
 	}
 	
-	public UUID updateProduct(ProductUpdateRequestDto dto) {
-		this.productJpaRepository.updateProduct(dto.getId(), dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getCatalogueId());
-		return dto.getId();
+	public Product updateProduct(ProductUpdateRequestDto dto) {
+		var updatedProduct = this.productJpaRepository.updateProduct(dto.getId(), dto.getTitle(), dto.getDescription(), dto.getPrice(), dto.getCatalogueId());
+		return updatedProduct;
 	}
 	
 	public UUID deleteProduct(UUID productId) {

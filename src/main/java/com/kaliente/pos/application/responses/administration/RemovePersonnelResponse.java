@@ -6,8 +6,9 @@ public class RemovePersonnelResponse {
     UUID removedPersonnelId;
     String removedPersonnelEmail;
 
-    public RemovePersonnelResponse() {
-        super();
+    public RemovePersonnelResponse(UUID removedPersonnelId, String removedPersonnelEmail) {
+        this.removedPersonnelId = removedPersonnelId;
+        this.removedPersonnelEmail = removedPersonnelEmail;
     }
 
     public RemovePersonnelResponse(UUID id) {

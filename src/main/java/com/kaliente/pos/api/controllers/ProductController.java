@@ -61,7 +61,7 @@ public class ProductController {
 	public ResponseEntity<BaseResponse<ProductAddResponseDto>> addNewProduct(@RequestBody ProductAddRequestDto dto) {
 		
 		var result = productService.createNewProduct(dto);
-		var response = new ProductAddResponseDto(result);
+		var response = new ProductAddResponseDto(result.getId(), result.getTitle());
 		
 		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.CREATED);
 	}
@@ -71,7 +71,7 @@ public class ProductController {
 	public ResponseEntity<BaseResponse<ProductUpdateResponseDto>> updateProduct(@RequestBody ProductUpdateRequestDto dto) {
 		
 		var result = this.productService.updateProduct(dto);
-		var response = new ProductUpdateResponseDto(result);
+		var response = new ProductUpdateResponseDto(result.getId(), result.getTitle());
 		
 		return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
 	}

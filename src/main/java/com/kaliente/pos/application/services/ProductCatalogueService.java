@@ -40,13 +40,13 @@ public class ProductCatalogueService {
 			return productCatalogues.stream().map(p -> modelMapper.map(p, ProductCatalogueDetailsDto.class)).toList();
 		}
 		
-		public UUID createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
+		public ProductCatalogue createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
 			
 			var createdProductCatalogue = this.catalogueJpaRepository.addProductCatalogue(dto.getTitle(), dto.getDescription(), dto.getParentCatalogueId());
-			return createdProductCatalogue.getId();
+			return createdProductCatalogue;
 		}
 		
-		public UUID updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
+		public ProductCatalogue updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
 			var createdProductCatalogue = this.catalogueJpaRepository.updateProductCatalogue(
 				dto.getId(), 
 				dto.getTitle(),
@@ -55,7 +55,7 @@ public class ProductCatalogueService {
 			);
 
 			if(createdProductCatalogue != null)
-				return createdProductCatalogue.getId();
+				return createdProductCatalogue;
 
 			return null;
 			

@@ -1,6 +1,9 @@
 package com.kaliente.pos.api.configs;
 
 
+import com.kaliente.pos.api.filters.JwtRequestFilter;
+import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.kaliente.pos.api.filters.JwtRequestFilter;
-import com.kaliente.pos.domain.useraggregate.UserRepository;
-import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
-
 @Configuration
 @EnableAutoConfiguration
 @EnableWebSecurity
@@ -31,8 +30,6 @@ import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
 @ComponentScan(basePackages="com.kaliente.pos")
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private UserRepository userRepository;
 
 	@Autowired
 	private UserJpaRepository userJpaRepository;
