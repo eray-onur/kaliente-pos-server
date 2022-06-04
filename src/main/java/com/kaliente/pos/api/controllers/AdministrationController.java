@@ -2,9 +2,12 @@ package com.kaliente.pos.api.controllers;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.kaliente.pos.application.models.base.BaseResponse;
 import com.kaliente.pos.application.models.dtos.administration.GetAllRolesResponse;
+import com.kaliente.pos.application.models.dtos.administration.UpdatePersonnelRequest;
+import com.kaliente.pos.application.models.dtos.administration.UpdatePersonnelResponse;
 import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
 import com.kaliente.pos.application.responses.administration.GetPersonnelByIdResponse;
 import com.kaliente.pos.application.responses.administration.RemovePersonnelResponse;
@@ -20,11 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import antlr.collections.List;
 
 @RestController
 @RequestMapping("/administration")
@@ -37,7 +41,7 @@ public class AdministrationController {
     private AdministrationService adminService;
 
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
     @GetMapping("/getPersonnelById")
     public ResponseEntity<BaseResponse<GetPersonnelByIdResponse>> getById(@RequestParam UUID personnelId) throws Exception {
         User foundUser = adminService.getPersonnelById(personnelId);
@@ -51,16 +55,20 @@ public class AdministrationController {
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
     @GetMapping("/getRoles")
-    public ResponseEntity<BaseResponse<ArrayList<GetAllRolesResponse>>> getSystemRoles() throws Exception {
+    public ResponseEntity<BaseResponse<GetAllRolesResponse>> getSystemRoles() throws Exception {
         ArrayList<Role> sysRoles = adminService.getSystemRoles();
-
-        var response = new ArrayList<GetAllRolesResponse>();
-        sysRoles.stream().forEach(x -> response.add(new GetAllRolesResponse(x.getTitle())));
-
-
+        var response = new GetAllRolesResponse(sysRoles.stream().map(r -> r.getTitle()).collect(Collectors.toList()));
         return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
-
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping("/updatePersonnel")
+    public ResponseEntity<BaseResponse<UpdatePersonnelResponse>> updatePersonnel(@RequestBody UpdatePersonnelRequest request) throws Exception {
+        User updatedPersonnel = adminService.updatePersonnel(request);
+        var response = new UpdatePersonnelResponse(updatedPersonnel.getId());
+        return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+    }
+
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping("/removePersonnel")

@@ -1,18 +1,17 @@
 package com.kaliente.pos.application.models.dtos.administration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GetAllRolesResponse {
 
-    String title;
+    ArrayList<String> titles;
 
-    public GetAllRolesResponse(String title) {
-        this.title = title;
+    public GetAllRolesResponse(List<String> titles) {
+        this.titles = new ArrayList<String>(titles);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public ArrayList<String> getTitle() {
+        return titles;
     }
 }

@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RoleJpaRepository implements RoleRepository {
+public class RoleHibernateRepository implements RoleRepository {
     
     private EntityManager em;
 
     @Autowired
-    RoleJpaRepository(EntityManager em) {
+    RoleHibernateRepository(EntityManager em) {
         this.em = em;
     }
 

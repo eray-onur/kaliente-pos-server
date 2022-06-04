@@ -2,7 +2,7 @@ package com.kaliente.pos.api.configs;
 
 
 import com.kaliente.pos.api.filters.JwtRequestFilter;
-import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
+import com.kaliente.pos.infrastructure.persistence.UserHibernateRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -32,7 +32,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 
 	@Autowired
-	private UserJpaRepository userJpaRepository;
+	private UserHibernateRepository userJpaRepository;
 	
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;

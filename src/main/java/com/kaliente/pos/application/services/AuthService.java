@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kaliente.pos.domain.useraggregate.User;
-import com.kaliente.pos.infrastructure.persistence.RoleJpaRepository;
-import com.kaliente.pos.infrastructure.persistence.UserJpaRepository;
+import com.kaliente.pos.infrastructure.persistence.RoleHibernateRepository;
+import com.kaliente.pos.infrastructure.persistence.UserHibernateRepository;
 import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterAdminResponseDto;
@@ -32,10 +32,10 @@ public class AuthService {
 	private JwtUtil jwtTokenUtil;
 	
 	@Autowired
-	private UserJpaRepository userRepository;
+	private UserHibernateRepository userRepository;
 	
 	@Autowired
-	private RoleJpaRepository roleRepository;
+	private RoleHibernateRepository roleRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;

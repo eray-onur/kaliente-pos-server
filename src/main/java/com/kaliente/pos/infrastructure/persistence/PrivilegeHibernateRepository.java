@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PrivilegeJpaRepository implements PrivilegeRepository {
+public class PrivilegeHibernateRepository implements PrivilegeRepository {
     private EntityManager em;
 
     @Autowired
-    PrivilegeJpaRepository(EntityManager em) {
+    PrivilegeHibernateRepository(EntityManager em) {
         this.em = em;
     }
 

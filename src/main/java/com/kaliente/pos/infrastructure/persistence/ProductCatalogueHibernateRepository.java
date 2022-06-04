@@ -16,13 +16,13 @@ import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 
 
 @Repository
-public class ProductCatalogueJpaRepository implements ProductCatalogueRepository {
+public class ProductCatalogueHibernateRepository implements ProductCatalogueRepository {
 
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
-    public ProductCatalogueJpaRepository(EntityManager em) {
+    public ProductCatalogueHibernateRepository(EntityManager em) {
         this.em = em;
     }
 

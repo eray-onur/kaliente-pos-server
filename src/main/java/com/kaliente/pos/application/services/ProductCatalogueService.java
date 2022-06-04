@@ -12,14 +12,14 @@ import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogu
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueUpdateRequestDto;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
-import com.kaliente.pos.infrastructure.persistence.ProductCatalogueJpaRepository;
+import com.kaliente.pos.infrastructure.persistence.ProductCatalogueHibernateRepository;
 
 @Service
 public class ProductCatalogueService {
 	
 
 	@Autowired
-	private ProductCatalogueJpaRepository catalogueJpaRepository;
+	private ProductCatalogueHibernateRepository catalogueJpaRepository;
 	
 	@Autowired
 	private ModelMapper modelMapper;

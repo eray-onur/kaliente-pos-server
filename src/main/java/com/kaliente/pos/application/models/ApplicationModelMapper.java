@@ -2,6 +2,7 @@ package com.kaliente.pos.application.models;
 
 import org.modelmapper.ModelMapper;
 
+import com.kaliente.pos.application.models.dtos.administration.UpdatePersonnelRequest;
 import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
 import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto;
@@ -22,6 +23,8 @@ public class ApplicationModelMapper {
 		mapper.createTypeMap(User.class, RegisterPersonnelRequestDto.class);
 		mapper.createTypeMap(User.class, RegisterAdminRequestDto.class);
 		mapper.createTypeMap(User.class, PersonnelDetailsDto.class);
+
+		mapper.createTypeMap(UpdatePersonnelRequest.class, User.class).addMapping(src -> src.getPersonnelId(), (dest,v) -> dest.getId());
 		
 
 		mapper.createTypeMap(Product.class, ProductAddRequestDto.class);

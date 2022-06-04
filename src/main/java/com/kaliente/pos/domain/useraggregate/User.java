@@ -19,13 +19,14 @@ public class User  extends BaseEntity implements AggregateRoot {
 	
 	
 	private String userName;
+	@Column(updatable = true)
 	private String firstName;
 	private String lastName;
 	@Column(unique=true)
 	private String email;
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany()
     @JoinTable( 
         name = "user_roles", 
         joinColumns = @JoinColumn(
