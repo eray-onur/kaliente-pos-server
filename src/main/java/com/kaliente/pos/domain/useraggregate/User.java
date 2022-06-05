@@ -1,15 +1,11 @@
 package com.kaliente.pos.domain.useraggregate;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
@@ -26,22 +22,17 @@ public class User  extends BaseEntity implements AggregateRoot {
 	private String email;
 	private String password;
 	
-	@ManyToMany()
-    @JoinTable( 
-        name = "user_roles", 
-        joinColumns = @JoinColumn(
-          name = "user_id", referencedColumnName = "id"), 
-        inverseJoinColumns = @JoinColumn(
-          name = "role_id", referencedColumnName = "id")) 
-    private Collection<Role> roles = new ArrayList<Role>();
+	@ManyToOne()
+	@JoinColumn(name = "role_id", nullable = true)
+    private Role role;
 	
 	
 	
-	public Collection<Role> getRoles() {
-		return roles;
+	public Role getRole() {
+		return role;
 	}
-	public void setRoles(Collection<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	public UUID getId() {
 		return id;

@@ -46,9 +46,10 @@ public class UserHibernateRepository implements UserDetailsService, UserReposito
 
     public Set<SimpleGrantedAuthority> getAuthority(User foundUser) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        foundUser.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getTitle()));
-        });
+        authorities.add(new SimpleGrantedAuthority(foundUser.getRole().getTitle()));
+        // foundUser.getRoles().forEach(role -> {
+        //     authorities.add(new SimpleGrantedAuthority(role.getTitle()));
+        // });
         return authorities;
     }
 
@@ -61,7 +62,7 @@ public class UserHibernateRepository implements UserDetailsService, UserReposito
     }
 
     public User findByEmail(String email) {
-        Query findUserQuery = em.createQuery("SELECT u from users u left join fetch u.roles WHERE u.email=:email and u.isActive = true",User.class);
+        Query findUserQuery = em.createQuery("SELECT u from users u left join fetch u.role WHERE u.email=:email and u.isActive = true",User.class);
         findUserQuery.setParameter("email", email);
 
         User foundUser = (User) findUserQuery.getSingleResult();

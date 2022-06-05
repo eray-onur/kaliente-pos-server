@@ -56,7 +56,7 @@ public class AuthService {
 	public String register(RegisterRequestDto registerDto) {
 		
 		User userToCreate = modelMapper.map(registerDto, User.class);
-		userToCreate.setRoles(Arrays.asList(roleRepository.findByTitle("ROLE_PERSONNEL")));
+		userToCreate.setRole(roleRepository.findByTitle("ROLE_PERSONNEL"));
 		User createdUser = this.userRepository.save(userToCreate);
 		
 		if(createdUser == null) {
@@ -79,7 +79,7 @@ public class AuthService {
 		);
 
 		Role adminRole = this.roleRepository.findByTitle("ROLE_ADMIN");
-		adminToRegister.getRoles().add(adminRole);
+		adminToRegister.setRole(adminRole);
 		adminRole.getUsers().add(adminToRegister);
 
 		User registeredAdmin = userRepository.save(adminToRegister);
@@ -95,7 +95,7 @@ public class AuthService {
 
 
 		Role personnelRole = this.roleRepository.findByTitle("ROLE_PERSONNEL");
-		personnelToRegister.getRoles().add(personnelRole);
+		personnelToRegister.setRole(personnelRole);
 		personnelRole.getUsers().add(personnelToRegister);
 
 

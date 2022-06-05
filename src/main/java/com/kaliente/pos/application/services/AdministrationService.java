@@ -69,7 +69,7 @@ public class AdministrationService {
             throw new Exception("Personnel does not exist!");
         }
 
-        if (user.getRoles().contains(rolePersonnel) == false) {
+        if (user.getRole().equals(rolePersonnel)) {
             throw new Exception("User is not a personnel, cannot be deleted!");
         }
 

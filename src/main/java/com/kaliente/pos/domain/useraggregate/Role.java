@@ -5,10 +5,9 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-
+import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
@@ -21,7 +20,7 @@ public class Role extends BaseEntity {
 	@Column(unique=true)
 	private String title;
 
-	@ManyToMany(mappedBy="roles")
+	@OneToMany(mappedBy = "role")
 	private Collection<User> users;
 	
 	

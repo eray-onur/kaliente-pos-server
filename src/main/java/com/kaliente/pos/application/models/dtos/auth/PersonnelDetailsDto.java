@@ -7,6 +7,7 @@ public class PersonnelDetailsDto {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String roleTitle;
 	
 	public UUID getId() {
 		return id;
@@ -31,5 +32,11 @@ public class PersonnelDetailsDto {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	public String getRoleTitle() {
+		return this.roleTitle;
+	}
+	public void setRoleTitle(String roleTitle) {
+		this.roleTitle = roleTitle;
 	}
 }
