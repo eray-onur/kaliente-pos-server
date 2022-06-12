@@ -4,6 +4,13 @@ spring:
     allow-bean-definition-overriding: true
   profiles:
     active: development
+  # Multipart configuration
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 128KB
+      max-request-size: 128KB
+      location: ${java.io.tmpdir}
   # Security configuration
   security:
     user:
@@ -19,6 +26,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        flush-mode: COMMIT
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -38,3 +46,10 @@ logging:
 # Server configuration
 server:
   port: 8079 #set your port
+# App configuration
+app:
+  mainCurrencyTitle: USD
+# External assets dir configuration
+assets:
+  productImagesPath: assets/productImages
+  personnelProfileImagesPath: assets/personnelProfileImages

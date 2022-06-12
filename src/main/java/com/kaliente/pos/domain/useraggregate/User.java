@@ -2,10 +2,7 @@ package com.kaliente.pos.domain.useraggregate;
 
 import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
@@ -25,6 +22,9 @@ public class User  extends BaseEntity implements AggregateRoot {
 	@ManyToOne()
 	@JoinColumn(name = "role_id", nullable = true)
     private Role role;
+
+	@OneToOne(mappedBy = "user")
+	private Personnel personnel;
 	
 	
 	

@@ -1,16 +1,20 @@
 package com.kaliente.pos.domain.productaggregate;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity(name="products")
 @Table
 public class Product extends BaseEntity implements AggregateRoot {
@@ -21,8 +25,11 @@ public class Product extends BaseEntity implements AggregateRoot {
 	private String description;
 	@Column
 	private double price;
+	@Column
+	private double stockedUnits;
+	@Column
+	private String imagePath;
 
-	public Product() {}
 
 	public Product(String title, String description, double price) {
 		this.title = title;
@@ -30,7 +37,7 @@ public class Product extends BaseEntity implements AggregateRoot {
 		this.price = price;
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name="catalogue_id", nullable = true)
 	private ProductCatalogue catalogue;
 
@@ -56,6 +63,14 @@ public class Product extends BaseEntity implements AggregateRoot {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
 	}
 
 	public ProductCatalogue getCatalogue() {

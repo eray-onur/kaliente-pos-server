@@ -3,13 +3,9 @@ package com.kaliente.pos.domain.productaggregate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 
 @Entity(name="product_catalogues")
@@ -22,7 +18,7 @@ public class ProductCatalogue extends BaseEntity {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="catalogue")
 	private List<Product> products = new ArrayList<Product>();
 	
-	@ManyToOne(fetch=FetchType.LAZY, optional = true)
+	@ManyToOne(fetch=FetchType.LAZY, optional = true, cascade= CascadeType.MERGE)
 	@JoinColumn(name = "parent_catalogue_id", nullable = true)
 	private ProductCatalogue parentCatalogue;
 	

@@ -1,5 +1,6 @@
 package com.kaliente.pos.domain.seedwork;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,9 +21,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 // Persisted database entity.
+@Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity {
+public class BaseEntity implements Serializable {
 	
 	@Id
 	@GeneratedValue(generator = "UUID")
@@ -32,19 +35,19 @@ public class BaseEntity {
     @Column(name = "id", updatable = false, nullable = false)
 	protected UUID id = UUID.randomUUID();
 	
-	@Column(nullable = false, updatable = false)
+	@Column(nullable = true, updatable = false)
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date createdOn;
 
-	@CreatedBy
+//	@CreatedBy
 	protected UUID createdBy;
 
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date lastModifiedOn;
 
-	@LastModifiedBy
+//	@LastModifiedBy
 	protected UUID lastModifiedBy;
 	
 	protected boolean isActive;
@@ -89,4 +92,5 @@ public class BaseEntity {
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
 	}
+
 }

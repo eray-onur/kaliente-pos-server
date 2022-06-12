@@ -1,9 +1,6 @@
 package com.kaliente.pos.infrastructure.persistence;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
