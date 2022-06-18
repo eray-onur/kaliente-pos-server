@@ -52,7 +52,7 @@ public class ProductHibernateRepository {
     @Transactional
     public Product addProduct(String title, String description, double price, UUID catalogueId) {
 
-        Product createdProduct = new Product(title, description, price);
+        Product createdProduct = new Product();
 
         if (catalogueId != null) {
             ProductCatalogue catalogue = em.find(ProductCatalogue.class, catalogueId);
@@ -72,7 +72,7 @@ public class ProductHibernateRepository {
         Product foundProduct = em.find(Product.class, productId);
         foundProduct.setTitle(title);
         foundProduct.setDescription(description);
-        foundProduct.setPrice(price);
+//        foundProduct.setPrice(price);
 
         if (catalogueId == null) {
             foundProduct.setCatalogue(null);

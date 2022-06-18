@@ -6,80 +6,48 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
 @Entity(name="products")
 @Table
+//@EntityListeners(AuditingEntityListener.class)
 public class Product extends BaseEntity implements AggregateRoot {
 	
 	@Column(unique=true)
 	private String title;
 	@Column
 	private String description;
+	@Column(nullable = true)
+	private double stockedUnits;
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride( name = "currencyTitle", column = @Column(name = "currency_title")),
+			@AttributeOverride( name = "currencyDate", column = @Column(name = "currency_date")),
+			@AttributeOverride( name = "baseCrossRate", column = @Column(name = "base_cross_rate")),
+			@AttributeOverride( name = "currencyRate", column = @Column(name = "currency_rate"))
+	})
+	private ProductCurrency currency;
 	@Column
 	private double price;
 	@Column
-	private double stockedUnits;
+	private double cost;
 	@Column
 	private String imagePath;
-
-
-	public Product(String title, String description, double price) {
-		this.title = title;
-		this.description = description;
-		this.price = price;
-	}
-	
-	@ManyToOne(cascade=CascadeType.MERGE)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="catalogue_id", nullable = true)
 	private ProductCatalogue catalogue;
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getImagePath() {
-		return imagePath;
-	}
-
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-
-	public ProductCatalogue getCatalogue() {
-		return catalogue;
-	}
-
-	public void setCatalogue(ProductCatalogue catalogue) {
-		this.catalogue = catalogue;
-	}
+//	@OneToOne(mappedBy = "products")
+//	private ProductCost cost;
+//
+//	@OneToOne(mappedBy = "products")
+//	private ProductPrice price;
 
 	
 }

@@ -1,15 +1,17 @@
 package com.kaliente.pos.domain.orderaggregate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 @Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Entity(name = "order_customers")
 @Table
 public class OrderCustomer extends BaseEntity {
@@ -23,6 +25,7 @@ public class OrderCustomer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderCustomerType customerType;
 
-    @OneToOne(mappedBy = "orderedBy")
+    @OneToOne(mappedBy = "orderedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Order order;
 }

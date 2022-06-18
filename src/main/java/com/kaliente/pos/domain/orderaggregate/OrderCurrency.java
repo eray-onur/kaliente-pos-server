@@ -16,4 +16,5 @@ public class OrderCurrency {
     private String currencyTitle;
     private double baseCrossRate;
     private Date currencyDate;
+    private double currencyRate;
 }

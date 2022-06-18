@@ -76,7 +76,6 @@ public class AdministrationController {
         User serviceResult = adminService.removePersonnel(personnelEmail);
         var response = new RemovePersonnelResponse(serviceResult.getId(), serviceResult.getEmail());
         return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
-
     }
 
 }

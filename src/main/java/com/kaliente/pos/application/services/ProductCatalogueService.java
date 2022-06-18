@@ -16,58 +16,53 @@ import com.kaliente.pos.infrastructure.persistence.ProductCatalogueHibernateRepo
 
 @Service
 public class ProductCatalogueService {
-	
 
-	@Autowired
-	private ProductCatalogueHibernateRepository catalogueJpaRepository;
-	
-	@Autowired
-	private ModelMapper modelMapper;
-		
-		
-		public ProductCatalogueDetailsDto getProductCatalogueById(UUID catalogueId) {
-			ProductCatalogue productCatalogue =  this.catalogueJpaRepository.getProductCatalogueById(catalogueId);
-			if(productCatalogue == null) {
-				return null;
-			}
-			return modelMapper.map(productCatalogue, ProductCatalogueDetailsDto.class);
-		}
-		
-		public List<ProductCatalogueDetailsDto> getAllCatalogues() {
-			// List<ProductCatalogue> productCatalogues = this.catalogueRepository.findAll();
 
-			Collection<ProductCatalogue> productCatalogues = this.catalogueJpaRepository.getProductCatalogues();
-			return productCatalogues.stream().map(p -> modelMapper.map(p, ProductCatalogueDetailsDto.class)).toList();
-		}
-		
-		public ProductCatalogue createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
-			
-			var createdProductCatalogue = this.catalogueJpaRepository.addProductCatalogue(dto.getTitle(), dto.getDescription(), dto.getParentCatalogueId());
-			return createdProductCatalogue;
-		}
-		
-		public ProductCatalogue updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
-			var createdProductCatalogue = this.catalogueJpaRepository.updateProductCatalogue(
-				dto.getId(), 
-				dto.getTitle(),
-				dto.getDescription(), 
-				dto.getParentCatalogueId()
-			);
+    @Autowired
+    private ProductCatalogueHibernateRepository catalogueJpaRepository;
 
-			if(createdProductCatalogue != null)
-				return createdProductCatalogue;
+    @Autowired
+    private ModelMapper modelMapper;
 
-			return null;
-			
-		}
-		
-		public UUID deleteProductCatalogue(UUID catalogueId) {
-			var result = this.catalogueJpaRepository.archiveProductCatalogue(catalogueId);
-			if(result)
-				return catalogueId;
 
-			return null;
-		}
-	
-	
+    public ProductCatalogueDetailsDto getProductCatalogueById(UUID catalogueId) {
+        ProductCatalogue productCatalogue = this.catalogueJpaRepository.getProductCatalogueById(catalogueId);
+        if (productCatalogue == null) {
+            return null;
+        }
+        return modelMapper.map(productCatalogue, ProductCatalogueDetailsDto.class);
+    }
+
+    public List<ProductCatalogueDetailsDto> getAllCatalogues() {
+        // List<ProductCatalogue> productCatalogues = this.catalogueRepository.findAll();
+
+        Collection<ProductCatalogue> productCatalogues = this.catalogueJpaRepository.getProductCatalogues();
+        return productCatalogues.stream().map(p -> modelMapper.map(p, ProductCatalogueDetailsDto.class)).toList();
+    }
+
+    public ProductCatalogue createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
+        var createdProductCatalogue = this.catalogueJpaRepository.addProductCatalogue(dto.getTitle(), dto.getDescription(), dto.getParentCatalogueId());
+        return createdProductCatalogue;
+    }
+
+    public ProductCatalogue updateProductCatalogue(ProductCatalogueUpdateRequestDto dto) {
+        var createdProductCatalogue = this.catalogueJpaRepository.updateProductCatalogue(
+                dto.getId(),
+                dto.getTitle(),
+                dto.getDescription(),
+                dto.getParentCatalogueId()
+        );
+
+        return createdProductCatalogue;
+    }
+
+    public UUID deleteProductCatalogue(UUID catalogueId) {
+        var result = this.catalogueJpaRepository.archiveProductCatalogue(catalogueId);
+        if (result)
+            return catalogueId;
+
+        return null;
+    }
+
+
 }

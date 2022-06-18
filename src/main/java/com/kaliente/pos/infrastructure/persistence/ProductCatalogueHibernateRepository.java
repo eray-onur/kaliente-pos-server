@@ -16,7 +16,7 @@ import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
 
 
 @Repository
-public class ProductCatalogueHibernateRepository implements ProductCatalogueRepository {
+public class ProductCatalogueHibernateRepository {
 
     @PersistenceContext
     private EntityManager em;
@@ -26,7 +26,6 @@ public class ProductCatalogueHibernateRepository implements ProductCatalogueRepo
         this.em = em;
     }
 
-    @Override
     public ProductCatalogue getProductCatalogueById(UUID catalogueId) {
 
         var getByIdQuery = em.createQuery(
@@ -44,7 +43,6 @@ public class ProductCatalogueHibernateRepository implements ProductCatalogueRepo
         return null;
     }
 
-    @Override
     public Collection<ProductCatalogue> getProductCatalogues() {
 
         var result = em.createQuery("FROM product_catalogues pc left join fetch pc.parentCatalogue ppc WHERE pc.isActive = true", ProductCatalogue.class).getResultList();
@@ -52,7 +50,6 @@ public class ProductCatalogueHibernateRepository implements ProductCatalogueRepo
         return result;
     }
 
-    @Override
     @Transactional
     public ProductCatalogue addProductCatalogue(String title, String description, UUID parentCatalogueId) {
 
@@ -72,7 +69,6 @@ public class ProductCatalogueHibernateRepository implements ProductCatalogueRepo
         return createdCatalogue;
     }
 
-    @Override
     @Transactional
     public ProductCatalogue updateProductCatalogue(UUID catalogueId, String title, String description, UUID parentCatalogueId) {
 
@@ -96,7 +92,6 @@ public class ProductCatalogueHibernateRepository implements ProductCatalogueRepo
         return foundCatalogue;
     }
 
-    @Override
     @Transactional
     public boolean archiveProductCatalogue(UUID catalogueId) {
         Query archiveQuery = em.createQuery("UPDATE product_catalogues SET isActive = false WHERE id = :catalogueId");

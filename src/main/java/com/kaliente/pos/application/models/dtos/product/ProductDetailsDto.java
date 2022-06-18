@@ -3,43 +3,19 @@ package com.kaliente.pos.application.models.dtos.product;
 import java.util.UUID;
 
 import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
+import com.kaliente.pos.domain.productaggregate.ProductCurrency;
+import lombok.Getter;
+import lombok.Setter;
 
-
+@Getter
+@Setter
 public class ProductDetailsDto {
 	private UUID id;
 	private String title;
 	private String description;
+	private double cost;
 	private double price;
+	private ProductCurrency currency;
 	private ProductCatalogueDetailsDto catalogue;
-	
-	public UUID getId() {
-		return id;
-	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public double getPrice() {
-		return price;
-	}
-	public void setPrice(double price) {
-		this.price = price;
-	}
-	public ProductCatalogueDetailsDto getCatalogue() {
-		return catalogue;
-	}
-	public void setCatalogue(ProductCatalogueDetailsDto catalogue) {
-		this.catalogue = catalogue;
-	}
+
 }
