@@ -3,11 +3,10 @@ package com.kaliente.pos.domain.orderaggregate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
+import org.hibernate.FetchMode;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
@@ -31,10 +30,24 @@ public class Order extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade={CascadeType.MERGE}, mappedBy = "belongingOrder")
-    private Set<OrderProduct> orderProducts = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade={CascadeType.MERGE}, mappedBy = "belongingOrder")
-    private Set<OrderTransaction> paymentTransactions = new HashSet<>();
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "currencyTitle", column = @Column(name = "currency_title")),
+            @AttributeOverride( name = "currencyDate", column = @Column(name = "currency_date")),
+            @AttributeOverride( name = "baseCrossRate", column = @Column(name = "base_cross_rate")),
+            @AttributeOverride( name = "currencyRate", column = @Column(name = "currency_rate"))
+    })
+    private OrderCurrency currency;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "belongingOrder")
+    private Set<OrderProduct> orderProducts = new HashSet<OrderProduct>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "belongingOrder")
+    private Set<OrderTransaction> paymentTransactions = new HashSet<OrderTransaction>();
+
+    public double getTotalPrice() {
+        return orderProducts.stream().mapToDouble(OrderProduct::getPrice).sum();
+    }
 
 }

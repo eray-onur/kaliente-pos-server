@@ -13,7 +13,7 @@ public class OrderProductDto {
     private UUID orderId;
     private UUID orderedProductId;
     private String orderedProductTitle;
-    private ProductCurrency currency;
+    private String currencyTitle;
     private double price;
     private double invoicePath;
 }

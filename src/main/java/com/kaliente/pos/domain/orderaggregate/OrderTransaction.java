@@ -6,9 +6,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Builder
 @Entity(name = "order_transactions")
 @Table
@@ -30,9 +32,9 @@ public class OrderTransaction extends BaseEntity {
             @AttributeOverride( name = "baseCrossRate", column = @Column(name = "base_cross_rate")),
             @AttributeOverride( name = "currencyRate", column = @Column(name = "currency_rate"))
     })
-    private OrderCurrency paymentCurrency;
+    private OrderCurrency transactionCurrency;
 
-    @Column(updatable = false)
+    @Column(name = "paid_amount")
     private double paidAmount;
 
 }

@@ -1,13 +1,9 @@
 package com.kaliente.pos.application.services;
 
-import com.kaliente.pos.application.models.dtos.order.OrderCustomerDto;
-import com.kaliente.pos.application.models.dtos.order.OrderProductDto;
-import com.kaliente.pos.application.requests.order.CancelOrderRequest;
-import com.kaliente.pos.application.requests.order.CompleteOrderRequest;
-import com.kaliente.pos.application.requests.order.CreateOrderRequest;
-import com.kaliente.pos.application.requests.order.MakePaymentForOrderRequest;
+import com.kaliente.pos.api.configs.AppConfig;
+import com.kaliente.pos.application.models.CurrencyDto;
+import com.kaliente.pos.application.requests.order.*;
 import com.kaliente.pos.domain.orderaggregate.*;
-import org.aspectj.weaver.ast.Or;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +17,13 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
+    private CurrencyHistoryService currencyHistoryService;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    AppConfig appConfig;
 
 
     public List<Order> getAll() {
@@ -36,18 +36,66 @@ public class OrderService {
     }
 
     public Order getOrderByCustomerId(UUID customerId) {
-
         return orderRepository.findByOrderedBy_Id(customerId);
     }
 
     @Transactional
     public Order createOrder(CreateOrderRequest request) {
 
+        ArrayList<CurrencyDto> currencies = currencyHistoryService.getAllCurrencies();
+
+
         Set<OrderProduct> orderedProducts = request.getOrderedProducts()
                 .stream().map(x -> modelMapper.map(x, OrderProduct.class)).collect(Collectors.toSet());
+
+        for(var orderProduct : request.getOrderedProducts()) {
+            Optional<CurrencyDto> foundCurrency = currencies
+                    .stream()
+                    .filter(c -> Objects.equals(c.getCurrencyTitle(), orderProduct.getCurrencyTitle()))
+                    .findFirst();
+
+            if(foundCurrency.isEmpty()) {
+                throw new IllegalStateException(
+                        "Could not find a valid currency for ordered product "
+                        + orderProduct.getOrderedProductTitle()
+                        + ".");
+            }
+
+            var orderProductCurrency = new OrderCurrency(
+                    foundCurrency.get().getCurrencyTitle(),
+                    foundCurrency.get().getBaseCrossRate(),
+                    foundCurrency.get().getCurrencyDate(),
+                    foundCurrency.get().getCurrencyRate()
+            );
+
+            orderedProducts.stream()
+                    .filter(op -> op.getOrderedProductId() == orderProduct.getOrderedProductId()).findFirst()
+                    .get()
+                    .setCurrency(orderProductCurrency);
+        }
+
+
+        Optional<CurrencyDto> orderCurrency = currencies
+                .stream()
+                .filter(c -> Objects.equals(c.getCurrencyTitle(), request.getCurrencyTitle()))
+                .findFirst();
+
+        if(orderCurrency.isEmpty()) {
+            throw new IllegalStateException("Main currency state of order could not be initialized.");
+        }
+
+        var currency = new OrderCurrency(
+                orderCurrency.get().getCurrencyTitle(),
+                orderCurrency.get().getBaseCrossRate(),
+                orderCurrency.get().getCurrencyDate(),
+                orderCurrency.get().getCurrencyRate()
+        );
+
+
         OrderCustomer orderedBy = modelMapper.map(request.getOrderedBy(), OrderCustomer.class);
 
         Order orderToCreate = Order.builder()
+                .currency(currency)
                 .status(OrderStatus.TAKEN)
                 .orderingDate(new Date())
                 .orderedBy(orderedBy)
@@ -55,7 +103,6 @@ public class OrderService {
                 .build();
 
         orderToCreate.getOrderProducts().forEach(op -> op.setBelongingOrder(orderToCreate));
-
         orderToCreate.setOrderedBy(orderedBy);
 
         return orderRepository.save(orderToCreate);
@@ -63,42 +110,84 @@ public class OrderService {
 
     public Order cancelOrder(CancelOrderRequest request) {
         Optional<Order> orderToCancel = orderRepository.findById(request.getOrderId());
-        if(orderToCancel.isPresent()) {
-            orderToCancel.get().setStatus(OrderStatus.CANCELLED);
-            return orderToCancel.get();
+        if(orderToCancel.isEmpty()) {
+            return null;
         }
-        return null;
+        orderToCancel.get().setStatus(OrderStatus.CANCELLED);
+        return orderRepository.save(orderToCancel.get());
     }
 
     public Order completeOrder(CompleteOrderRequest request) {
         Optional<Order> orderToComplete = orderRepository.findById(request.getOrderId());
-        if(orderToComplete.isPresent()) {
-            orderToComplete.get().setStatus(OrderStatus.COMPLETED);
-            return orderToComplete.get();
+        if(orderToComplete.isEmpty()) {
+            return null;
         }
-        return null;
+        orderToComplete.get().setStatus(OrderStatus.COMPLETED);
+        return orderRepository.save(orderToComplete.get());
     }
 
-    public Order makePaymentForOrder(MakePaymentForOrderRequest request) {
+    public Order createTransaction(CreateTransactionForOrderRequest request) {
+
         Optional<Order> order = orderRepository.findById(request.getOrderId());
 
-        if(order.isPresent()) {
-            OrderTransaction newTransaction = OrderTransaction.builder()
-                    .belongingOrder(order.get())
-                    // TODO: Add currency for OrderTransaction builder.
-                    .paymentMethod(request.getPaymentMethod())
-                    .paidAmount(request.getAmount())
-                    .build();
-
-
-//            order.get().getPaymentTransactions().add(newTransaction);
-
-            return order.get();
+        if(order.isEmpty()) {
+            throw new IllegalStateException("Failed to find the order for transaction.");
         }
 
-        return null;
+        CurrencyDto foundCurrency = currencyHistoryService.getLatestRateByTitle(request.getPaymentCurrencyTitle());
+
+        if(foundCurrency == null) {
+            throw new IllegalStateException("Given currency is not supported (" + request.getPaymentCurrencyTitle() + ").");
+        }
+
+        OrderCurrency orderCurrency = new OrderCurrency(foundCurrency.getCurrencyTitle(), foundCurrency.getBaseCrossRate(), foundCurrency.getCurrencyDate(), foundCurrency.getCurrencyRate());
+
+        OrderTransaction newTransaction = OrderTransaction.builder()
+                    .paymentMethod(request.getPaymentMethod())
+                    .transactionCurrency(orderCurrency)
+                    .paidAmount(request.getPaidAmount())
+                    .build();
+
+        newTransaction.setBelongingOrder(order.get());
+        order.get().getPaymentTransactions().add(newTransaction);
+
+        // Payment Calculation
+        double totalPrice = order.get().getTotalPrice();
+        double newTotalPrice = 0.0;
+
+        for(OrderTransaction transaction : order.get().getPaymentTransactions()) {
+            if(transaction.getTransactionCurrency().getCurrencyTitle().equals(appConfig.getMainCurrencyTitle())) {
+                newTotalPrice += transaction.getPaidAmount();
+            }
+            else {
+                newTotalPrice += (transaction.getPaidAmount() * transaction.getTransactionCurrency().getCurrencyRate());
+            }
+        }
+        // TODO: Create Backpayment transaction if new total exceeds total price.
+        if(newTotalPrice > totalPrice) {
+            throw new UnsupportedOperationException("Transaction failed to be added, reason: exceeds total price.");
+        }
+        orderRepository.save(order.get());
+        return order.get();
     }
 
+    public Order updateCustomerInformation(UpdateCustomerInformationRequest request) {
+
+        Optional<Order> order = orderRepository.findById(request.getOrderId());
+
+        if(order.isEmpty()) {
+            return null;
+        }
+
+        OrderCustomer customerToUpdate = order.get().getOrderedBy();
+        customerToUpdate.setEmail(request.getEmail());
+        customerToUpdate.setFirstName(request.getFirstName());
+        customerToUpdate.setLastName(request.getLastName());
+        customerToUpdate.setCustomerType(request.getCustomerType());
+
+        return orderRepository.save(order.get());
+
+    }
 
 
 }

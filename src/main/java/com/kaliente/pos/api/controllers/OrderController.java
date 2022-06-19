@@ -92,35 +92,43 @@ public class OrderController {
     public ResponseEntity<BaseResponse<CancelOrderResponse>> cancelOrder(@RequestBody CancelOrderRequest request) {
 
         // TODO: Developing the CancelOrder service.
+        Order cancelledOrder = orderService.cancelOrder(request);
 
-        return new ResponseEntity<>(new BaseResponse<>(null, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+        var response = new CancelOrderResponse(cancelledOrder.getId());
+        return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
     @PostMapping("/complete")
     public ResponseEntity<BaseResponse<CompleteOrderResponse>> completeOrder(@RequestBody CompleteOrderRequest request) {
 
-        // TODO: Developing the CancelOrder service.
+        // TODO: Developing the CompleteOrder service.
+        Order completedOrder = orderService.completeOrder(request);
 
-        return new ResponseEntity<>(new BaseResponse<>(null, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+        var response = new CompleteOrderResponse(completedOrder.getId());
+        return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
-    @PostMapping("{orderId}/makePayment")
-    public ResponseEntity<BaseResponse<MakePaymentForOrderResponse>> completeOrder(@PathVariable("orderId") UUID orderId, @RequestBody MakePaymentForOrderRequest request) {
+    @PostMapping("createTransaction")
+    public ResponseEntity<BaseResponse<CreateTransactionForOrderResponse>> createTransaction(@RequestBody CreateTransactionForOrderRequest request) {
 
-        // TODO: Developing the MakePaymentForOrder service.
+        // TODO: Developing the CreateTransaction service.
+        Order transactionOrder = orderService.createTransaction(request);
 
-        return new ResponseEntity<>(new BaseResponse<>(null, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+        var response = new CreateTransactionForOrderResponse(transactionOrder.getId());
+        return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
-    @PostMapping("{orderId}/update/customer-info")
-    public ResponseEntity<BaseResponse<UpdateCustomerInformationResponse>> updateCustomerInformation(@PathVariable("orderId") UUID orderId, @RequestBody UpdateCustomerInformationRequest request) {
+    @PostMapping("/update/customer-info")
+    public ResponseEntity<BaseResponse<UpdateCustomerInformationResponse>> updateCustomerInformation(@RequestBody UpdateCustomerInformationRequest request) {
 
         // TODO: Developing the UpdateCustomerInformationForOrder service.
+        Order order = orderService.updateCustomerInformation(request);
 
-        return new ResponseEntity<>(new BaseResponse<>(null, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+        var response = new UpdateCustomerInformationResponse(order.getOrderedBy().getId());
+        return new ResponseEntity<>(new BaseResponse<>(response, Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
     }
 
 }
