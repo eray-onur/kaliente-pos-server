@@ -1,6 +1,7 @@
 package com.kaliente.pos.domain.orderaggregate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
 import org.hibernate.FetchMode;
@@ -15,7 +16,7 @@ import java.util.*;
 @Builder
 @Entity(name = "orders")
 @Table
-public class Order extends BaseEntity {
+public class Order extends BaseEntity implements AggregateRoot {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")

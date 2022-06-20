@@ -1,9 +1,6 @@
 package com.kaliente.pos.application.models;
 
-import com.kaliente.pos.application.models.dtos.order.OrderCustomerDto;
-import com.kaliente.pos.application.models.dtos.order.OrderDetailsDto;
-import com.kaliente.pos.application.models.dtos.order.OrderProductDto;
-import com.kaliente.pos.application.models.dtos.order.OrderTransactionDto;
+import com.kaliente.pos.application.models.dtos.order.*;
 import com.kaliente.pos.domain.orderaggregate.Order;
 import com.kaliente.pos.domain.orderaggregate.OrderCustomer;
 import com.kaliente.pos.domain.orderaggregate.OrderProduct;
@@ -43,18 +40,12 @@ public class ApplicationModelMapper {
 
 		mapper
 		.createTypeMap(ProductCatalogue.class, ProductCatalogueDetailsDto.class);
-		
-//		 PropertyMap<ProductCatalogueDetailsDto, ProductCatalogue> catalogueMap = new PropertyMap<ProductCatalogueDetailsDto, ProductCatalogue> () {
-//		 	protected void configure() {
-//		 		map().setParentCatalogue(source.getParentCatalogueId());
-//		 	}
-//		 }
-
 
 
 		mapper.createTypeMap(Order.class, OrderDetailsDto.class);
 		mapper.createTypeMap(OrderProduct.class, OrderProductDto.class);
 		mapper.createTypeMap(OrderTransaction.class, OrderTransactionDto.class);
+		mapper.createTypeMap(OrderTransaction.class, OrderPartialTransactionDto.class);
 		mapper.createTypeMap(OrderCustomer.class, OrderCustomerDto.class);
 	}
 	

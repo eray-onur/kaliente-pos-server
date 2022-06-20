@@ -40,7 +40,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(CreateOrderRequest request) {
+    public Order createPartialOrder(CreatePartialOrderRequest request) {
 
         ArrayList<CurrencyDto> currencies = currencyHistoryService.getAllCurrencies();
 
@@ -96,7 +96,7 @@ public class OrderService {
 
         Order orderToCreate = Order.builder()
                 .currency(currency)
-                .status(OrderStatus.TAKEN)
+                .status(OrderStatus.AWAITING_PAYMENT)
                 .orderingDate(new Date())
                 .orderedBy(orderedBy)
                 .orderProducts(orderedProducts)
@@ -106,6 +106,132 @@ public class OrderService {
         orderToCreate.setOrderedBy(orderedBy);
 
         return orderRepository.save(orderToCreate);
+    }
+
+    public Order createFullOrder(CreateFullOrderRequest request) {
+        ArrayList<CurrencyDto> currencies = currencyHistoryService.getAllCurrencies();
+
+
+        Set<OrderProduct> orderedProducts = request.getOrderedProducts()
+                .stream().map(x -> modelMapper.map(x, OrderProduct.class)).collect(Collectors.toSet());
+
+        for(var orderProduct : request.getOrderedProducts()) {
+            Optional<CurrencyDto> foundCurrency = currencies
+                    .stream()
+                    .filter(c -> Objects.equals(c.getCurrencyTitle(), orderProduct.getCurrencyTitle()))
+                    .findFirst();
+
+            if(foundCurrency.isEmpty()) {
+                throw new IllegalStateException(
+                        "Could not find a valid currency for ordered product "
+                                + orderProduct.getOrderedProductTitle()
+                                + ".");
+            }
+
+            var orderProductCurrency = new OrderCurrency(
+                    foundCurrency.get().getCurrencyTitle(),
+                    foundCurrency.get().getBaseCrossRate(),
+                    foundCurrency.get().getCurrencyDate(),
+                    foundCurrency.get().getCurrencyRate()
+            );
+
+            orderedProducts.stream()
+                    .filter(op -> op.getOrderedProductId() == orderProduct.getOrderedProductId()).findFirst()
+                    .get()
+                    .setCurrency(orderProductCurrency);
+        }
+
+        Optional<CurrencyDto> orderCurrency = currencies
+                .stream()
+                .filter(c -> Objects.equals(c.getCurrencyTitle(), request.getCurrencyTitle()))
+                .findFirst();
+
+        if(orderCurrency.isEmpty()) {
+            throw new IllegalStateException("Main currency state of order could not be initialized.");
+        }
+
+        var currency = new OrderCurrency(
+                orderCurrency.get().getCurrencyTitle(),
+                orderCurrency.get().getBaseCrossRate(),
+                orderCurrency.get().getCurrencyDate(),
+                orderCurrency.get().getCurrencyRate()
+        );
+
+        // Customer mapping
+        OrderCustomer orderedBy = modelMapper.map(request.getOrderedBy(), OrderCustomer.class);
+        //
+        // Transaction mapping
+        Set<OrderTransaction> transactions = new HashSet<>();
+
+        for(var transaction : request.getTransactions()) {
+            Optional<CurrencyDto> foundCurrency = currencies
+                    .stream()
+                    .filter(c -> Objects.equals(
+                            c.getCurrencyTitle(),
+                            transaction.getPaymentCurrencyTitle())
+                    )
+                    .findFirst();
+
+            if(foundCurrency.isEmpty())
+                throw new IllegalStateException("One transaction's currency title is not valid.");
+
+            OrderTransaction transactionToAdd = modelMapper.map(transaction, OrderTransaction.class);
+            transactionToAdd.setTransactionCurrency(
+                    new OrderCurrency(
+                            foundCurrency.get().getCurrencyTitle(),
+                            foundCurrency.get().getBaseCrossRate(),
+                            foundCurrency.get().getCurrencyDate(),
+                            foundCurrency.get().getCurrencyRate()
+                    )
+            );
+
+            transactions.add(transactionToAdd);
+
+        }
+
+        //
+
+        Order orderToCreate = Order.builder()
+                .currency(currency)
+                .status(OrderStatus.TAKEN)
+                .orderingDate(new Date())
+                .orderedBy(orderedBy)
+                .orderProducts(orderedProducts)
+                .paymentTransactions(transactions)
+                .build();
+
+        // Total price calculation
+        double totalPrice = 0.0;
+        for(var product : orderToCreate.getOrderProducts()) {
+            if(product.getCurrency().getCurrencyTitle().equals(appConfig.getMainCurrencyTitle())) {
+                totalPrice += product.getPrice();
+            }
+            else {
+                totalPrice += (product.getPrice() * product.getCurrency().getCurrencyRate());
+            }
+        }
+        //
+        // Transaction calculation
+        double transactionTotalAmount = 0.0;
+        for(var transaction : orderToCreate.getPaymentTransactions()) {
+            if(transaction.getTransactionCurrency().getCurrencyTitle().equals(appConfig.getMainCurrencyTitle())) {
+                transactionTotalAmount += transaction.getPaidAmount();
+            }
+            else {
+                transactionTotalAmount += (transaction.getPaidAmount() * transaction.getTransactionCurrency().getCurrencyRate());
+            }
+        }
+        if(transactionTotalAmount > totalPrice) {
+            throw new UnsupportedOperationException("Transaction failed to be added, reason: exceeds total price.");
+        }
+        //
+
+        orderToCreate.getOrderProducts().forEach(op -> op.setBelongingOrder(orderToCreate));
+        orderToCreate.getPaymentTransactions().forEach(pt -> pt.setBelongingOrder(orderToCreate));
+        orderToCreate.setOrderedBy(orderedBy);
+
+        return orderRepository.save(orderToCreate);
+
     }
 
     public Order cancelOrder(CancelOrderRequest request) {

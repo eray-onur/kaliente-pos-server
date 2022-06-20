@@ -80,9 +80,17 @@ public class OrderController {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
-    @PostMapping("/create")
-    public ResponseEntity<BaseResponse<CreateOrderResponse>> createOrder(@RequestBody CreateOrderRequest request) {
-        Order createdOrder = orderService.createOrder(request);
+    @PostMapping("/create/partial")
+    public ResponseEntity<BaseResponse<CreateOrderResponse>> createPartialOrder(@RequestBody CreatePartialOrderRequest request) {
+        Order createdOrder = orderService.createPartialOrder(request);
+
+        return new ResponseEntity<>(new BaseResponse<>(new CreateOrderResponse(createdOrder.getId()), Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
+    @PostMapping("/create/full")
+    public ResponseEntity<BaseResponse<CreateOrderResponse>> createFullOrder(@RequestBody CreateFullOrderRequest request) {
+        Order createdOrder = orderService.createFullOrder(request);
 
         return new ResponseEntity<>(new BaseResponse<>(new CreateOrderResponse(createdOrder.getId()), Constants.OPERATION_SUCCESS_MESSAGE), HttpStatus.OK);
     }
