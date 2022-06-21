@@ -16,9 +16,4 @@ public class ProductCurrency {
     private double baseCrossRate;
     private double currencyRate;
     private Date currencyDate;
-
-    public ProductCurrency() {
-        currencyDate = new Date();
-    }
-
 }

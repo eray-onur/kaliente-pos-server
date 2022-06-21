@@ -1,10 +1,8 @@
 package com.kaliente.pos.domain.orderaggregate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
-import org.hibernate.FetchMode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -48,7 +46,7 @@ public class Order extends BaseEntity implements AggregateRoot {
     private Set<OrderTransaction> paymentTransactions = new HashSet<OrderTransaction>();
 
 
-    public Order.OrderBuilder addNewTransactions(Set<OrderTransaction> transactionsToProcess) {
+    public void addNewTransactions(Set<OrderTransaction> transactionsToProcess) {
 
         double totalProductPrice = orderProducts.stream().mapToDouble(
                 op -> (op.getCurrency().getCurrencyRate() == 1 // Checking if the given currency object is the main currency.
@@ -83,7 +81,9 @@ public class Order extends BaseEntity implements AggregateRoot {
 
         if(newTransactionPrice > totalProductPrice) {
 
-            OrderTransaction backpayment = OrderTransaction.builder()
+            setStatus(OrderStatus.AWAITING_PAYMENT);
+
+            OrderTransaction backPayment = OrderTransaction.builder()
                     .belongingOrder(this)
                     .transactionCurrency(getCurrency())
                     .paidAmount(newTransactionPrice - totalProductPrice)
@@ -91,10 +91,11 @@ public class Order extends BaseEntity implements AggregateRoot {
                     .transactionMethod(TransactionMethod.CASH)
                     .build();
 
-            paymentTransactions.add(backpayment);
+            paymentTransactions.add(backPayment);
+        } else {
+            setStatus(OrderStatus.COMPLETED);
         }
 
-        return builder();
     }
 
     public double getTotalPrice() {

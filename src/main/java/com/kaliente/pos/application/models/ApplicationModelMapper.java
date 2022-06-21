@@ -1,10 +1,8 @@
 package com.kaliente.pos.application.models;
 
 import com.kaliente.pos.application.models.dtos.order.*;
-import com.kaliente.pos.domain.orderaggregate.Order;
-import com.kaliente.pos.domain.orderaggregate.OrderCustomer;
-import com.kaliente.pos.domain.orderaggregate.OrderProduct;
-import com.kaliente.pos.domain.orderaggregate.OrderTransaction;
+import com.kaliente.pos.domain.orderaggregate.*;
+import com.kaliente.pos.domain.productaggregate.ProductCurrency;
 import org.modelmapper.ModelMapper;
 
 import com.kaliente.pos.application.models.dtos.administration.UpdatePersonnelRequest;
@@ -47,6 +45,9 @@ public class ApplicationModelMapper {
 		mapper.createTypeMap(OrderTransaction.class, OrderTransactionDto.class);
 		mapper.createTypeMap(OrderTransaction.class, OrderPartialTransactionDto.class);
 		mapper.createTypeMap(OrderCustomer.class, OrderCustomerDto.class);
+
+		mapper.createTypeMap(OrderCurrency.class, CurrencyModel.class);
+		mapper.createTypeMap(ProductCurrency.class, CurrencyModel.class);
 	}
 	
 }
