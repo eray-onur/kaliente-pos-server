@@ -1,7 +1,7 @@
 package com.kaliente.pos.application.services;
 
 import com.kaliente.pos.api.configs.AppConfig;
-import com.kaliente.pos.application.models.CurrencyDto;
+import com.kaliente.pos.application.models.CurrencyModel;
 import com.kaliente.pos.application.requests.order.*;
 import com.kaliente.pos.domain.orderaggregate.*;
 import org.modelmapper.ModelMapper;
@@ -42,14 +42,14 @@ public class OrderService {
     @Transactional
     public Order createPartialOrder(CreatePartialOrderRequest request) {
 
-        ArrayList<CurrencyDto> currencies = currencyHistoryService.getAllCurrencies();
+        ArrayList<CurrencyModel> currencies = currencyHistoryService.getAllCurrencies();
 
 
         Set<OrderProduct> orderedProducts = request.getOrderedProducts()
                 .stream().map(x -> modelMapper.map(x, OrderProduct.class)).collect(Collectors.toSet());
 
         for(var orderProduct : request.getOrderedProducts()) {
-            Optional<CurrencyDto> foundCurrency = currencies
+            Optional<CurrencyModel> foundCurrency = currencies
                     .stream()
                     .filter(c -> Objects.equals(c.getCurrencyTitle(), orderProduct.getCurrencyTitle()))
                     .findFirst();
@@ -75,7 +75,7 @@ public class OrderService {
         }
 
 
-        Optional<CurrencyDto> orderCurrency = currencies
+        Optional<CurrencyModel> orderCurrency = currencies
                 .stream()
                 .filter(c -> Objects.equals(c.getCurrencyTitle(), request.getCurrencyTitle()))
                 .findFirst();
@@ -109,14 +109,14 @@ public class OrderService {
     }
 
     public Order createFullOrder(CreateFullOrderRequest request) {
-        ArrayList<CurrencyDto> currencies = currencyHistoryService.getAllCurrencies();
+        ArrayList<CurrencyModel> currencies = currencyHistoryService.getAllCurrencies();
 
 
         Set<OrderProduct> orderedProducts = request.getOrderedProducts()
                 .stream().map(x -> modelMapper.map(x, OrderProduct.class)).collect(Collectors.toSet());
 
         for(var orderProduct : request.getOrderedProducts()) {
-            Optional<CurrencyDto> foundCurrency = currencies
+            Optional<CurrencyModel> foundCurrency = currencies
                     .stream()
                     .filter(c -> Objects.equals(c.getCurrencyTitle(), orderProduct.getCurrencyTitle()))
                     .findFirst();
@@ -141,7 +141,7 @@ public class OrderService {
                     .setCurrency(orderProductCurrency);
         }
 
-        Optional<CurrencyDto> orderCurrency = currencies
+        Optional<CurrencyModel> orderCurrency = currencies
                 .stream()
                 .filter(c -> Objects.equals(c.getCurrencyTitle(), request.getCurrencyTitle()))
                 .findFirst();
@@ -164,7 +164,7 @@ public class OrderService {
         Set<OrderTransaction> transactions = new HashSet<>();
 
         for(var transaction : request.getTransactions()) {
-            Optional<CurrencyDto> foundCurrency = currencies
+            Optional<CurrencyModel> foundCurrency = currencies
                     .stream()
                     .filter(c -> Objects.equals(
                             c.getCurrencyTitle(),
@@ -189,41 +189,16 @@ public class OrderService {
 
         }
 
-        //
-
         Order orderToCreate = Order.builder()
                 .currency(currency)
                 .status(OrderStatus.TAKEN)
                 .orderingDate(new Date())
                 .orderedBy(orderedBy)
                 .orderProducts(orderedProducts)
-                .paymentTransactions(transactions)
                 .build();
 
         // Total price calculation
-        double totalPrice = 0.0;
-        for(var product : orderToCreate.getOrderProducts()) {
-            if(product.getCurrency().getCurrencyTitle().equals(appConfig.getMainCurrencyTitle())) {
-                totalPrice += product.getPrice();
-            }
-            else {
-                totalPrice += (product.getPrice() * product.getCurrency().getCurrencyRate());
-            }
-        }
-        //
-        // Transaction calculation
-        double transactionTotalAmount = 0.0;
-        for(var transaction : orderToCreate.getPaymentTransactions()) {
-            if(transaction.getTransactionCurrency().getCurrencyTitle().equals(appConfig.getMainCurrencyTitle())) {
-                transactionTotalAmount += transaction.getPaidAmount();
-            }
-            else {
-                transactionTotalAmount += (transaction.getPaidAmount() * transaction.getTransactionCurrency().getCurrencyRate());
-            }
-        }
-        if(transactionTotalAmount > totalPrice) {
-            throw new UnsupportedOperationException("Transaction failed to be added, reason: exceeds total price.");
-        }
+        orderToCreate.addNewTransactions(transactions);
         //
 
         orderToCreate.getOrderProducts().forEach(op -> op.setBelongingOrder(orderToCreate));
@@ -260,7 +235,7 @@ public class OrderService {
             throw new IllegalStateException("Failed to find the order for transaction.");
         }
 
-        CurrencyDto foundCurrency = currencyHistoryService.getLatestRateByTitle(request.getPaymentCurrencyTitle());
+        CurrencyModel foundCurrency = currencyHistoryService.getLatestRateByTitle(request.getPaymentCurrencyTitle());
 
         if(foundCurrency == null) {
             throw new IllegalStateException("Given currency is not supported (" + request.getPaymentCurrencyTitle() + ").");
@@ -269,30 +244,19 @@ public class OrderService {
         OrderCurrency orderCurrency = new OrderCurrency(foundCurrency.getCurrencyTitle(), foundCurrency.getBaseCrossRate(), foundCurrency.getCurrencyDate(), foundCurrency.getCurrencyRate());
 
         OrderTransaction newTransaction = OrderTransaction.builder()
-                    .paymentMethod(request.getPaymentMethod())
+                    .transactionMethod(request.getPaymentMethod())
                     .transactionCurrency(orderCurrency)
                     .paidAmount(request.getPaidAmount())
                     .build();
 
         newTransaction.setBelongingOrder(order.get());
-        order.get().getPaymentTransactions().add(newTransaction);
 
-        // Payment Calculation
-        double totalPrice = order.get().getTotalPrice();
-        double newTotalPrice = 0.0;
+        HashSet<OrderTransaction> transactionContainer = new HashSet<>();
+        transactionContainer.add(newTransaction);
 
-        for(OrderTransaction transaction : order.get().getPaymentTransactions()) {
-            if(transaction.getTransactionCurrency().getCurrencyTitle().equals(appConfig.getMainCurrencyTitle())) {
-                newTotalPrice += transaction.getPaidAmount();
-            }
-            else {
-                newTotalPrice += (transaction.getPaidAmount() * transaction.getTransactionCurrency().getCurrencyRate());
-            }
-        }
-        // TODO: Create Backpayment transaction if new total exceeds total price.
-        if(newTotalPrice > totalPrice) {
-            throw new UnsupportedOperationException("Transaction failed to be added, reason: exceeds total price.");
-        }
+        // Total price calculation
+        order.get().addNewTransactions(transactionContainer);
+        //
         orderRepository.save(order.get());
         return order.get();
     }

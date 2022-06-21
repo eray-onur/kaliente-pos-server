@@ -1,5 +1,5 @@
 package com.kaliente.pos.domain.orderaggregate;
 
-public enum OrderPaymentMethod {
+public enum TransactionMethod {
     CREDIT_CARD, DEBIT_CARD, CASH
 }

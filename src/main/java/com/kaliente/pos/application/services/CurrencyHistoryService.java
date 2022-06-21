@@ -1,8 +1,7 @@
 package com.kaliente.pos.application.services;
 
 import com.kaliente.pos.api.configs.AppConfig;
-import com.kaliente.pos.api.configs.AssetsFolderConfig;
-import com.kaliente.pos.application.models.CurrencyDto;
+import com.kaliente.pos.application.models.CurrencyModel;
 import com.kaliente.pos.application.requests.currency.AppendNewCurrencyRequest;
 import com.kaliente.pos.domain.currency.CurrencyHistory;
 import com.kaliente.pos.domain.currency.CurrencyHistoryRepository;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 @Service
 public class CurrencyHistoryService {
@@ -24,7 +22,7 @@ public class CurrencyHistoryService {
     @Autowired
     AppConfig appConfig;
 
-    public CurrencyDto appendNewCurrency(AppendNewCurrencyRequest request) {
+    public CurrencyModel appendNewCurrency(AppendNewCurrencyRequest request) {
         CurrencyHistory ch = CurrencyHistory.builder()
                 .currencyTitle(request.getCurrencyTitle())
                 .baseCrossRate(request.getBaseCrossRate())
@@ -38,7 +36,7 @@ public class CurrencyHistoryService {
 
         var result =  currencyHistoryRepository.save(ch);
 
-        var response = new CurrencyDto();
+        var response = new CurrencyModel();
 
         response.setCurrencyTitle(result.getCurrencyTitle());
         response.setCurrencyRate(result.getCurrencyRate());
@@ -49,7 +47,7 @@ public class CurrencyHistoryService {
 
     }
 
-    public CurrencyDto getLatestRateByTitle(String currencyTitle) {
+    public CurrencyModel getLatestRateByTitle(String currencyTitle) {
         var histories = currencyHistoryRepository.findByCurrencyTitle(currencyTitle);
 
         if(histories.isEmpty())
@@ -57,7 +55,7 @@ public class CurrencyHistoryService {
 
         var latestHistory = histories.get(0);
 
-        var response = new CurrencyDto();
+        var response = new CurrencyModel();
 
         response.setCurrencyTitle(latestHistory.getCurrencyTitle());
         response.setCurrencyRate(latestHistory.getCurrencyRate());
@@ -67,12 +65,12 @@ public class CurrencyHistoryService {
         return response;
     }
 
-    public ArrayList<CurrencyDto> getAllCurrencies() {
+    public ArrayList<CurrencyModel> getAllCurrencies() {
         var histories = new ArrayList<>(currencyHistoryRepository.findAll());
-        var responseList = new ArrayList<CurrencyDto>();
+        var responseList = new ArrayList<CurrencyModel>();
 
         for(CurrencyHistory history: histories) {
-            var response = new CurrencyDto();
+            var response = new CurrencyModel();
 
             response.setCurrencyTitle(history.getCurrencyTitle());
             response.setCurrencyRate(history.getCurrencyRate());

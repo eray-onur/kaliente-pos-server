@@ -23,7 +23,10 @@ public class OrderTransaction extends BaseEntity {
 
 
     @Enumerated(EnumType.STRING)
-    private OrderPaymentMethod paymentMethod;
+    private TransactionMethod transactionMethod;
+
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
     @Embedded
     @AttributeOverrides({
