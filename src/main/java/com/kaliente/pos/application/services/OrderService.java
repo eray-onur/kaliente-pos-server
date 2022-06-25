@@ -1,6 +1,6 @@
 package com.kaliente.pos.application.services;
 
-import com.kaliente.pos.api.configs.AppConfig;
+import com.kaliente.pos.application.configs.AppConfig;
 import com.kaliente.pos.application.models.CurrencyModel;
 import com.kaliente.pos.application.requests.order.*;
 import com.kaliente.pos.domain.orderaggregate.*;
@@ -61,12 +61,7 @@ public class OrderService {
                         + ".");
             }
 
-            var orderProductCurrency = new OrderCurrency(
-                    foundCurrency.get().getCurrencyTitle(),
-                    foundCurrency.get().getBaseCrossRate(),
-                    foundCurrency.get().getCurrencyDate(),
-                    foundCurrency.get().getCurrencyRate()
-            );
+            var orderProductCurrency = modelMapper.map(foundCurrency.get(), OrderCurrency.class);
 
             orderedProducts.stream()
                     .filter(op -> op.getOrderedProductId() == orderProduct.getOrderedProductId()).findFirst()
@@ -108,6 +103,7 @@ public class OrderService {
         return orderRepository.save(orderToCreate);
     }
 
+    @Transactional
     public Order createFullOrder(CreateFullOrderRequest request) {
         ArrayList<CurrencyModel> currencies = currencyHistoryService.getAllCurrencies();
 
@@ -227,6 +223,7 @@ public class OrderService {
         return orderRepository.save(orderToComplete.get());
     }
 
+    @Transactional
     public Order createTransaction(CreateTransactionForOrderRequest request) {
 
         Optional<Order> order = orderRepository.findById(request.getOrderId());

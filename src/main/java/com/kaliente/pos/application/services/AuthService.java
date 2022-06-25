@@ -1,6 +1,5 @@
 package com.kaliente.pos.application.services;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,14 +15,14 @@ import org.springframework.stereotype.Service;
 import com.kaliente.pos.domain.useraggregate.User;
 import com.kaliente.pos.infrastructure.persistence.RoleHibernateRepository;
 import com.kaliente.pos.infrastructure.persistence.UserHibernateRepository;
-import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterAdminResponseDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelResponseDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterRequestDto;
+import com.kaliente.pos.application.models.auth.PersonnelDetailsDto;
+import com.kaliente.pos.application.requests.auth.RegisterAdminRequestDto;
+import com.kaliente.pos.application.responses.auth.RegisterAdminResponseDto;
+import com.kaliente.pos.application.requests.auth.RegisterPersonnelRequestDto;
+import com.kaliente.pos.application.responses.auth.RegisterPersonnelResponseDto;
+import com.kaliente.pos.application.requests.auth.RegisterRequestDto;
 import com.kaliente.pos.domain.useraggregate.Role;
-import com.kaliente.pos.sharedkernel.util.JwtUtil;
+import com.kaliente.pos.application.utils.JwtUtil;
 
 @Service
 public class AuthService {

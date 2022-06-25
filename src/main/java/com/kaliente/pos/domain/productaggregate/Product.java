@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @NoArgsConstructor
@@ -16,6 +18,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @Entity(name="products")
 @Table
+@SQLDelete(sql = "update products set isActive = 0 where id =?")
+@Where(clause = "isActive = 1")
 //@EntityListeners(AuditingEntityListener.class)
 public class Product extends BaseEntity implements AggregateRoot {
 	

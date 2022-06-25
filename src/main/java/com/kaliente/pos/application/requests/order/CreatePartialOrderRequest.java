@@ -1,7 +1,7 @@
 package com.kaliente.pos.application.requests.order;
 
-import com.kaliente.pos.application.models.dtos.order.OrderCustomerDto;
-import com.kaliente.pos.application.models.dtos.order.OrderProductDto;
+import com.kaliente.pos.application.models.order.OrderCustomerDto;
+import com.kaliente.pos.application.models.order.OrderProductDto;
 import lombok.Data;
 
 import java.util.List;

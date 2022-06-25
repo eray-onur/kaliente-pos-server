@@ -1,12 +1,11 @@
 package com.kaliente.pos.application.services;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import com.kaliente.pos.application.models.dtos.administration.UpdatePersonnelRequest;
+import com.kaliente.pos.application.requests.administration.UpdatePersonnelRequest;
 import com.kaliente.pos.domain.useraggregate.Role;
 import com.kaliente.pos.domain.useraggregate.User;
 import com.kaliente.pos.infrastructure.persistence.RoleHibernateRepository;

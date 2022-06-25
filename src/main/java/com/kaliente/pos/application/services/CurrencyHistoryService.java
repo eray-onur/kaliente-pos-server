@@ -1,6 +1,6 @@
 package com.kaliente.pos.application.services;
 
-import com.kaliente.pos.api.configs.AppConfig;
+import com.kaliente.pos.application.configs.AppConfig;
 import com.kaliente.pos.application.models.CurrencyModel;
 import com.kaliente.pos.application.requests.currency.AppendNewCurrencyRequest;
 import com.kaliente.pos.domain.currency.CurrencyHistory;

@@ -9,20 +9,16 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 
-import com.kaliente.pos.api.configs.AssetsFolderConfig;
-import com.kaliente.pos.domain.currency.CurrencyHistory;
+import com.kaliente.pos.application.configs.AssetsFolderConfig;
 import com.kaliente.pos.domain.productaggregate.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kaliente.pos.application.models.dtos.product.ProductAddRequestDto;
-import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
-import com.kaliente.pos.application.models.dtos.product.ProductUpdateRequestDto;
-import com.kaliente.pos.infrastructure.persistence.ProductHibernateRepository;
+import com.kaliente.pos.application.requests.product.ProductAddRequestDto;
+import com.kaliente.pos.application.models.product.ProductDetailsDto;
+import com.kaliente.pos.application.requests.product.ProductUpdateRequestDto;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.transaction.Transactional;
 
 @Service
 public class ProductService {
@@ -65,11 +61,8 @@ public class ProductService {
 		var latestHistory = currencyHistoryService.getLatestRateByTitle(dto.getCurrencyTitle());
 
 		if(latestHistory != null) {
-			ProductCurrency productCurrency = new ProductCurrency();
-			productCurrency.setCurrencyTitle(latestHistory.getCurrencyTitle());
-			productCurrency.setBaseCrossRate(latestHistory.getBaseCrossRate());
-			productCurrency.setCurrencyRate(latestHistory.getCurrencyRate());
-			productCurrency.setCurrencyDate(latestHistory.getCurrencyDate());
+			ProductCurrency productCurrency = modelMapper.map(latestHistory, ProductCurrency.class);
+
 			newProduct.setCurrency(productCurrency);
 		}
 
@@ -91,11 +84,7 @@ public class ProductService {
 			var latestHistory = currencyHistoryService.getLatestRateByTitle(dto.getCurrencyTitle());
 
 			if(latestHistory != null) {
-				ProductCurrency productCurrency = new ProductCurrency();
-				productCurrency.setCurrencyTitle(latestHistory.getCurrencyTitle());
-				productCurrency.setBaseCrossRate(latestHistory.getBaseCrossRate());
-				productCurrency.setCurrencyRate(latestHistory.getCurrencyRate());
-				productCurrency.setCurrencyDate(latestHistory.getCurrencyDate());
+				ProductCurrency productCurrency = modelMapper.map(latestHistory, ProductCurrency.class);
 				productToUpdate.get().setCurrency(productCurrency);
 			}
 
@@ -110,7 +99,7 @@ public class ProductService {
 		return productId;
 	}
 
-	public boolean uploadImage(MultipartFile productImage, UUID productId) {
+	public void uploadImage(MultipartFile productImage, UUID productId) {
 		Optional<Product> productToUpdate = productRepository.findById(productId);
 
 		try(InputStream inputStream = productImage.getInputStream()) {
@@ -120,7 +109,7 @@ public class ProductService {
 
 			var storedImagePathname = String.valueOf(productId) + "." + fileExtension[fileExtension.length - 1];
 
-			var loader = Files.copy(inputStream, uploadPath.resolve(storedImagePathname), StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(inputStream, uploadPath.resolve(storedImagePathname), StandardCopyOption.REPLACE_EXISTING);
 
 
 			productToUpdate.get().setImagePath(storedImagePathname);
@@ -129,7 +118,6 @@ public class ProductService {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		return true;
 	}
 	
 }

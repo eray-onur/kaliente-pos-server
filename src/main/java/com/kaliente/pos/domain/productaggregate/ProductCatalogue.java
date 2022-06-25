@@ -5,10 +5,20 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
 @Entity(name="product_catalogues")
+@Table
+@SQLDelete(sql = "update product_catalogues set isActive = 0 where id =?")
+@Where(clause = "isActive = 1")
 public class ProductCatalogue extends BaseEntity {
 
 	@Column(unique=true)
@@ -25,53 +35,10 @@ public class ProductCatalogue extends BaseEntity {
 	@OneToMany(mappedBy="parentCatalogue")
 	private List<ProductCatalogue> subcatalogues = new ArrayList<>();
 
-	public ProductCatalogue() {
-		
-	}
-
 	public ProductCatalogue(String title, String description) {
 		this.title = title;
 		this.description = description;
 	}
 
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public ProductCatalogue getParentCatalogue() {
-		return parentCatalogue;
-	}
-
-	public void setParentCatalogue(ProductCatalogue parentCatalogue) {
-		this.parentCatalogue = parentCatalogue;
-	}
-
-	public List<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-
-	public List<ProductCatalogue> getSubcatalogues() {
-		return subcatalogues;
-	}
-
-	public void setSubcatalogues(List<ProductCatalogue> subcatalogues) {
-		this.subcatalogues = subcatalogues;
-	}
 }

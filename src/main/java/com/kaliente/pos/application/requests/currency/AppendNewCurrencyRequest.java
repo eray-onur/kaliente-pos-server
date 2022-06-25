@@ -8,9 +8,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@Getter
-@Setter
 public class AppendNewCurrencyRequest {
     private String currencyTitle;
     private double baseCrossRate;

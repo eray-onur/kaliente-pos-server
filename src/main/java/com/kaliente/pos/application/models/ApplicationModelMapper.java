@@ -1,24 +1,23 @@
 package com.kaliente.pos.application.models;
 
-import com.kaliente.pos.application.models.dtos.order.*;
+import com.kaliente.pos.application.models.order.*;
 import com.kaliente.pos.domain.orderaggregate.*;
 import com.kaliente.pos.domain.productaggregate.ProductCurrency;
 import org.modelmapper.ModelMapper;
 
-import com.kaliente.pos.application.models.dtos.administration.UpdatePersonnelRequest;
-import com.kaliente.pos.application.models.dtos.auth.PersonnelDetailsDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterAdminRequestDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterPersonnelRequestDto;
-import com.kaliente.pos.application.models.dtos.auth.RegisterRequestDto;
-import com.kaliente.pos.application.models.dtos.product.ProductAddRequestDto;
-import com.kaliente.pos.application.models.dtos.product.ProductCreateDto;
-import com.kaliente.pos.application.models.dtos.product.ProductDetailsDto;
-import com.kaliente.pos.application.models.dtos.product.ProductUpdateRequestDto;
-import com.kaliente.pos.application.models.dtos.productcatalogue.ProductCatalogueDetailsDto;
+import com.kaliente.pos.application.requests.administration.UpdatePersonnelRequest;
+import com.kaliente.pos.application.models.auth.PersonnelDetailsDto;
+import com.kaliente.pos.application.requests.auth.RegisterAdminRequestDto;
+import com.kaliente.pos.application.requests.auth.RegisterPersonnelRequestDto;
+import com.kaliente.pos.application.requests.auth.RegisterRequestDto;
+import com.kaliente.pos.application.requests.product.ProductAddRequestDto;
+import com.kaliente.pos.application.models.product.ProductCreateDto;
+import com.kaliente.pos.application.models.product.ProductDetailsDto;
+import com.kaliente.pos.application.requests.product.ProductUpdateRequestDto;
+import com.kaliente.pos.application.models.productcatalogue.ProductCatalogueDetailsDto;
 import com.kaliente.pos.domain.productaggregate.Product;
 import com.kaliente.pos.domain.productaggregate.ProductCatalogue;
 import com.kaliente.pos.domain.useraggregate.User;
-import org.modelmapper.PropertyMap;
 
 public class ApplicationModelMapper {
 	

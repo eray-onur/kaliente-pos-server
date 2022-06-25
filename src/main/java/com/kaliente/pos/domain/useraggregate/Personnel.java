@@ -2,20 +2,21 @@ package com.kaliente.pos.domain.useraggregate;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
-
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Entity(name = "personnel")
 @Table
+@SQLDelete(sql = "update personnel set isActive = 0 where id =?")
+@Where(clause = "isActive = 1")
 public class Personnel extends BaseEntity {
-
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
     @Column
@@ -36,5 +37,4 @@ public class Personnel extends BaseEntity {
     private String countryOfBirth;
     @Column
     private String profileImagePath;
-
 }

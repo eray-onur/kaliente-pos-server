@@ -23,7 +23,7 @@ public class User  extends BaseEntity implements AggregateRoot {
 	@JoinColumn(name = "role_id", nullable = true)
     private Role role;
 
-	@OneToOne(mappedBy = "user")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
 	private Personnel personnel;
 	
 	

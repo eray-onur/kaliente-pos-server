@@ -3,6 +3,8 @@ package com.kaliente.pos.domain.orderaggregate;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,6 +16,8 @@ import java.util.*;
 @Builder
 @Entity(name = "orders")
 @Table
+@SQLDelete(sql = "update orders set isActive = 0 where id =?")
+@Where(clause = "isActive = 1")
 public class Order extends BaseEntity implements AggregateRoot {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -52,6 +56,7 @@ public class Order extends BaseEntity implements AggregateRoot {
                 op -> (op.getCurrency().getCurrencyRate() == 1 // Checking if the given currency object is the main currency.
                         ? op.getPrice()
                         : op.getPrice() * op.getCurrency().getCurrencyRate()
+                        * op.getOrderedProductQuantity()
                         )
         ).sum();
 
@@ -99,7 +104,7 @@ public class Order extends BaseEntity implements AggregateRoot {
     }
 
     public double getTotalPrice() {
-        return orderProducts.stream().mapToDouble(OrderProduct::getPrice).sum();
+        return orderProducts.stream().mapToDouble(op -> op.getOrderedProductQuantity() * op.getPrice()).sum();
     }
 
     public static class OrderBuilder {
