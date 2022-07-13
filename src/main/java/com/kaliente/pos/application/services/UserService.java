@@ -131,6 +131,10 @@ public class UserService {
             usersToCreate.add(adminToCreate);
 
         } else System.out.println("A minimum of one system admin already exists.");
+
+        if(!usersToCreate.isEmpty()) {
+            userRepository.saveAll(usersToCreate);
+        }
     }
 
 }
