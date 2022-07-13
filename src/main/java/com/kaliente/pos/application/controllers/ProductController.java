@@ -28,7 +28,7 @@ import javax.servlet.ServletContext;
 @RestController @RequestMapping("product")
 public class ProductController {
 	@Autowired
-	ServletContext context;
+	private ServletContext context;
 
 	@Autowired
 	private ProductService productService;

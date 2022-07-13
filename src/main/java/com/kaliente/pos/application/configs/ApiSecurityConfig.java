@@ -2,8 +2,8 @@ package com.kaliente.pos.application.configs;
 
 
 import com.kaliente.pos.application.filters.JwtRequestFilter;
-import com.kaliente.pos.infrastructure.persistence.UserHibernateRepository;
 
+import com.kaliente.pos.domain.useraggregate.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -29,17 +29,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan(basePackages="com.kaliente.pos")
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 
 	@Autowired
-	private UserHibernateRepository userJpaRepository;
-	
+	private UserRepository userRepository;
+
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userJpaRepository);
+		auth.userDetailsService(userRepository);
 	}
 	
 	

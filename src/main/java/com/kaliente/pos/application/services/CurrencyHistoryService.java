@@ -14,13 +14,16 @@ import java.util.ArrayList;
 @Service
 public class CurrencyHistoryService {
 
-    @Autowired
-    private CurrencyHistoryRepository currencyHistoryRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final CurrencyHistoryRepository currencyHistoryRepository;
+    private final ModelMapper modelMapper;
+    private final AppConfig appConfig;
 
     @Autowired
-    AppConfig appConfig;
+    public CurrencyHistoryService(CurrencyHistoryRepository currencyHistoryRepository, ModelMapper modelMapper, AppConfig appConfig) {
+        this.currencyHistoryRepository = currencyHistoryRepository;
+        this.modelMapper = modelMapper;
+        this.appConfig = appConfig;
+    }
 
     public CurrencyModel appendNewCurrency(AppendNewCurrencyRequest request) {
         CurrencyHistory ch = CurrencyHistory.builder()

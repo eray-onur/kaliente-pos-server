@@ -35,7 +35,7 @@ public abstract class BaseEntity {
 
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
-	protected Date createdOn;
+	protected Date createdOn = new Date();
 
 	@CreatedBy
 	protected UUID createdBy;

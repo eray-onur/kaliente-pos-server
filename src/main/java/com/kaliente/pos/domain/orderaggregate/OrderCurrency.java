@@ -10,8 +10,6 @@ import java.util.Date;
 @AllArgsConstructor
 @Embeddable
 @Builder
-@Getter
-@Setter
 public class OrderCurrency {
     private String currencyTitle;
     private double baseCrossRate;

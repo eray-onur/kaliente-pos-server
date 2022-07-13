@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.kaliente.pos.domain.useraggregate.UserRepository;
-import com.kaliente.pos.application.utils.JwtUtil;
+import com.kaliente.pos.application.utilities.JwtUtility;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -24,7 +24,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private JwtUtil jwtUtil;
+	private JwtUtility jwtUtility;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -37,14 +37,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		
 		if(header != null && header.startsWith("Bearer ")) {
 			jwt = header.replace("Bearer ", "");
-			username = jwtUtil.getUsernameFromToken(jwt);
+			username = jwtUtility.getUsernameFromToken(jwt);
 		}
 		
 		if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = this.userRepository.loadUserByUsername(username);
 			
-			if(jwtUtil.validateToken(jwt, userDetails)) {
-				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtUtil.getAuthentication(jwt, SecurityContextHolder.getContext().getAuthentication(), userDetails);
+			if(jwtUtility.validateToken(jwt, userDetails)) {
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = jwtUtility.getAuthentication(jwt, SecurityContextHolder.getContext().getAuthentication(), userDetails);
 				
 				usernamePasswordAuthenticationToken
 				.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

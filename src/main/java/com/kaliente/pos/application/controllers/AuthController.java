@@ -28,20 +28,24 @@ import com.kaliente.pos.application.responses.auth.RegisterPersonnelResponseDto;
 import com.kaliente.pos.application.requests.auth.RegisterRequestDto;
 import com.kaliente.pos.application.services.AuthService;
 import com.kaliente.pos.sharedkernel.Constants;
-import com.kaliente.pos.application.utils.JwtUtil;
+import com.kaliente.pos.application.utilities.JwtUtility;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-	
-	@Autowired
+
 	private AuthenticationManager authManager;
-	
-	@Autowired
-	private JwtUtil jwtTokenUtil;
-	
-	@Autowired
+
+	private JwtUtility jwtUtility;
+
 	private AuthService authService;
+
+	@Autowired
+	public AuthController(AuthenticationManager authManager, JwtUtility jwtUtility, AuthService authService) {
+		this.authManager = authManager;
+		this.jwtUtility = jwtUtility;
+		this.authService = authService;
+	}
 	
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
@@ -62,7 +66,7 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-		final String jToken = jwtTokenUtil.generateToken(authentication);
+		final String jToken = jwtUtility.generateToken(authentication);
 
 		var response = new AuthenticationResponseDto(jToken);
 

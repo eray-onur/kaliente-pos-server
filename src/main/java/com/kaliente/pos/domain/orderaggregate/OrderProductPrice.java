@@ -2,6 +2,8 @@ package com.kaliente.pos.domain.orderaggregate;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
@@ -12,6 +14,8 @@ import javax.persistence.*;
 @Setter
 @Entity(name = "order_product_prices")
 @Table
+@SQLDelete(sql = "update order_product_prices set is_active = false where id =?")
+@Where(clause = "is_active = true")
 public class OrderProductPrice extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)

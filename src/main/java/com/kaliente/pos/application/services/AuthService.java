@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.kaliente.pos.domain.useraggregate.RoleRepository;
+import com.kaliente.pos.domain.useraggregate.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kaliente.pos.domain.useraggregate.User;
-import com.kaliente.pos.infrastructure.persistence.RoleHibernateRepository;
-import com.kaliente.pos.infrastructure.persistence.UserHibernateRepository;
 import com.kaliente.pos.application.models.auth.PersonnelDetailsDto;
 import com.kaliente.pos.application.requests.auth.RegisterAdminRequestDto;
 import com.kaliente.pos.application.responses.auth.RegisterAdminResponseDto;
@@ -22,33 +22,29 @@ import com.kaliente.pos.application.requests.auth.RegisterPersonnelRequestDto;
 import com.kaliente.pos.application.responses.auth.RegisterPersonnelResponseDto;
 import com.kaliente.pos.application.requests.auth.RegisterRequestDto;
 import com.kaliente.pos.domain.useraggregate.Role;
-import com.kaliente.pos.application.utils.JwtUtil;
+import com.kaliente.pos.application.utilities.JwtUtility;
 
 @Service
 public class AuthService {
-	
-	@Autowired
-	private JwtUtil jwtTokenUtil;
-	
-	@Autowired
-	private UserHibernateRepository userRepository;
-	
-	@Autowired
-	private RoleHibernateRepository roleRepository;
+	private final JwtUtility jwtUtility;
+	private final UserRepository userRepository;
+	private final RoleRepository roleRepository;
+	private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-
-    @Autowired
-    private ModelMapper modelMapper;
+	public AuthService(JwtUtility jwtUtility, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+		this.jwtUtility = jwtUtility;
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.modelMapper = modelMapper;
+	}
     
     public List<PersonnelDetailsDto> getPersonnelList() {
-    	Collection<User> foundPersonnel = userRepository.findAllUsers();
-    	
-    	List<PersonnelDetailsDto> personnelList = foundPersonnel.stream().map(element -> modelMapper.map(element, PersonnelDetailsDto.class)).collect(Collectors.toList());
-    	
-    	return personnelList;
+    	Collection<User> foundPersonnel = userRepository.findAll();
+
+		return foundPersonnel.stream().map(element -> modelMapper.map(element, PersonnelDetailsDto.class)).collect(Collectors.toList());
     }
 	
 	
@@ -57,17 +53,12 @@ public class AuthService {
 		User userToCreate = modelMapper.map(registerDto, User.class);
 		userToCreate.setRole(roleRepository.findByTitle("ROLE_PERSONNEL"));
 		User createdUser = this.userRepository.save(userToCreate);
-		
-		if(createdUser == null) {
-			throw new Error("Could not create character.");
-		}
-		
+
 		UserDetails newUserDetail = userRepository.loadUserByUsername(
 				createdUser.getEmail()
 		);
-		final String jToken = jwtTokenUtil.generateToken(newUserDetail);
-		
-		return jToken;
+
+		return jwtUtility.generateToken(newUserDetail);
 	}
 	
 	@Transactional
@@ -79,7 +70,7 @@ public class AuthService {
 
 		Role adminRole = this.roleRepository.findByTitle("ROLE_ADMIN");
 		adminToRegister.setRole(adminRole);
-		adminRole.getUsers().add(adminToRegister);
+		adminToRegister.setPersonnel(null);
 
 		User registeredAdmin = userRepository.save(adminToRegister);
 		return new RegisterAdminResponseDto(registeredAdmin.getId(), registeredAdmin.getEmail());
@@ -92,12 +83,9 @@ public class AuthService {
 			passwordEncoder.encode(personnelToRegister.getPassword())
 		);
 
-
 		Role personnelRole = this.roleRepository.findByTitle("ROLE_PERSONNEL");
 		personnelToRegister.setRole(personnelRole);
-		personnelRole.getUsers().add(personnelToRegister);
-
-
+		personnelToRegister.setPersonnel(null);
 		User registeredUser = userRepository.save(personnelToRegister);
 
 		return new RegisterPersonnelResponseDto(registeredUser.getId(), registeredUser.getEmail());

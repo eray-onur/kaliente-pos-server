@@ -22,8 +22,8 @@ import java.util.UUID;
 @Builder
 @Entity(name = "order_products")
 @Table
-@SQLDelete(sql = "update order_products set isActive = 0 where id =?")
-@Where(clause = "isActive = 1")
+@SQLDelete(sql = "update order_products set is_active = false where id =?")
+@Where(clause = "is_active = true")
 public class OrderProduct extends BaseEntity {
 
     @Column(nullable = false, updatable = false)
@@ -32,7 +32,7 @@ public class OrderProduct extends BaseEntity {
     @Column(nullable = false, updatable = false)
     private String orderedProductTitle;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private double orderedProductQuantity;
 
     @ManyToOne(fetch = FetchType.LAZY)

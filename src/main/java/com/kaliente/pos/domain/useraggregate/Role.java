@@ -11,8 +11,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 
 import com.kaliente.pos.domain.seedwork.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity(name="roles")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SQLDelete(sql = "update roles set is_active = false where id =?")
+@Where(clause = "is_active = true")
 public class Role extends BaseEntity {
 	
 
@@ -31,43 +43,6 @@ public class Role extends BaseEntity {
 		inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName="id")
 	)
 	private Collection<Privilege> privileges = new ArrayList<Privilege>();
-
-	public Role() {}
-	
-	public Role(String title) {
-		super();
-		this.title = title;
-	}
-
-	
-	public String getTitle() {
-		return title;
-	}
-
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-
-	public Collection<User> getUsers() {
-		return users;
-	}
-
-
-	public void setUsers(Collection<User> users) {
-		this.users = users;
-	}
-
-
-	public Collection<Privilege> getPrivileges() {
-		return privileges;
-	}
-
-
-	public void setPrivileges(Collection<Privilege> privileges) {
-		this.privileges = privileges;
-	}
 
 	
 }

@@ -23,18 +23,26 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ProductService {
 
-	@Autowired
-	AssetsFolderConfig assetsFolderConfig;
-	@Autowired
-	private ProductRepository productRepository;
-	@Autowired
-	private ProductCatalogueRepository productCatalogueRepository;
-	@Autowired
-	private CurrencyHistoryService currencyHistoryService;
+	private final AssetsFolderConfig assetsFolderConfig;
+	private final ProductRepository productRepository;
+	private final ProductCatalogueRepository productCatalogueRepository;
+	private final CurrencyHistoryService currencyHistoryService;
 
-    @Autowired
-    private ModelMapper modelMapper;
-	
+    private final ModelMapper modelMapper;
+
+	@Autowired
+	public ProductService(
+			AssetsFolderConfig assetsFolderConfig,
+			ProductRepository productRepository,
+			ProductCatalogueRepository productCatalogueRepository,
+			CurrencyHistoryService currencyHistoryService,
+			ModelMapper modelMapper) {
+		this.assetsFolderConfig = assetsFolderConfig;
+		this.productRepository = productRepository;
+		this.productCatalogueRepository = productCatalogueRepository;
+		this.currencyHistoryService = currencyHistoryService;
+		this.modelMapper = modelMapper;
+	}
 	
 	public ProductDetailsDto getProductById(UUID productId) {
 		Optional<Product> product =  productRepository.findById(productId);
@@ -47,10 +55,7 @@ public class ProductService {
 	public List<ProductDetailsDto> getAll() {
 		var foundProducts = this.productRepository.findAll();
 
-		ArrayList<Product> products = new ArrayList<>();
-		foundProducts.forEach(products::add);
-
-		return products.stream().map(p -> modelMapper.map(p, ProductDetailsDto.class)).toList();
+		return foundProducts.stream().map(p -> modelMapper.map(p, ProductDetailsDto.class)).toList();
 	}
 	
 	public Product createNewProduct(ProductAddRequestDto dto) {
@@ -95,7 +100,11 @@ public class ProductService {
 	}
 	
 	public UUID deleteProduct(UUID productId) {
-		productRepository.deleteById(productId);
+		var prod = productRepository.findById(productId);
+		if(prod.isEmpty())
+			return null;
+
+		productRepository.delete(prod.get());
 		return productId;
 	}
 
@@ -105,7 +114,7 @@ public class ProductService {
 		try(InputStream inputStream = productImage.getInputStream()) {
 			String assetsPath = System.getProperty("user.dir");
 			Path uploadPath = Paths.get(assetsPath, assetsFolderConfig.getProductImagesPath());
-			String[] fileExtension = productImage.getOriginalFilename().split("\\.");
+			String[] fileExtension = Objects.requireNonNull(productImage.getOriginalFilename()).split("\\.");
 
 			var storedImagePathname = String.valueOf(productId) + "." + fileExtension[fileExtension.length - 1];
 

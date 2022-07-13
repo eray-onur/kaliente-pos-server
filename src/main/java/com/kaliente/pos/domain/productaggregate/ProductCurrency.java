@@ -6,11 +6,10 @@ import javax.persistence.Embeddable;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
 @Builder
-@Getter
-@Setter
 public class ProductCurrency {
     private String currencyTitle;
     private double baseCrossRate;

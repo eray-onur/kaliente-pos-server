@@ -10,8 +10,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
 public class ProductPrice extends BaseEntity {
 
 //    @OneToOne(cascade = CascadeType.MERGE)

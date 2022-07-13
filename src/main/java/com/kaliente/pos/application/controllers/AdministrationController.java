@@ -33,12 +33,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/administration")
 public class AdministrationController {
-    
-    @Autowired
+
     private ModelMapper mapper;
 
-    @Autowired
     private AdministrationService adminService;
+
+    @Autowired
+    public AdministrationController(ModelMapper mapper, AdministrationService adminService) {
+        this.mapper = mapper;
+        this.adminService = adminService;
+    }
 
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")

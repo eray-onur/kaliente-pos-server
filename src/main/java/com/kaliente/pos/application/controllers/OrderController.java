@@ -22,11 +22,15 @@ import java.util.stream.Collectors;
 @RequestMapping("order")
 public class OrderController {
 
-    @Autowired
+    private ModelMapper mapper;
     private OrderService orderService;
 
     @Autowired
-    private ModelMapper mapper;
+    public OrderController(ModelMapper mapper, OrderService orderService) {
+        this.mapper = mapper;
+        this.orderService = orderService;
+    }
+
 
     @PreAuthorize("hasAnyRole('ROLE_PERSONNEL')")
     @GetMapping("/getAll")

@@ -13,8 +13,8 @@ import java.util.Date;
 @Setter
 @Entity(name = "personnel")
 @Table
-@SQLDelete(sql = "update personnel set isActive = 0 where id =?")
-@Where(clause = "isActive = 1")
+@SQLDelete(sql = "update personnel set is_active = false where id =?")
+@Where(clause = "is_active = true")
 public class Personnel extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

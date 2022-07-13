@@ -6,4 +6,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 public interface ProductCatalogueRepository extends JpaRepository<ProductCatalogue, UUID> {
+
+    public ProductCatalogue getProductCatalogueById(UUID catalogueId);
+
+
+
 }

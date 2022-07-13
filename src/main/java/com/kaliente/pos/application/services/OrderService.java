@@ -15,15 +15,19 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private CurrencyHistoryService currencyHistoryService;
-    @Autowired
-    private ModelMapper modelMapper;
+    private final OrderRepository orderRepository;
+    private final CurrencyHistoryService currencyHistoryService;
+    private final ModelMapper modelMapper;
+
+    private final AppConfig appConfig;
 
     @Autowired
-    AppConfig appConfig;
+    public OrderService(OrderRepository orderRepository, CurrencyHistoryService currencyHistoryService, ModelMapper modelMapper, AppConfig appConfig) {
+        this.orderRepository = orderRepository;
+        this.currencyHistoryService = currencyHistoryService;
+        this.modelMapper = modelMapper;
+        this.appConfig = appConfig;
+    }
 
 
     public List<Order> getAll() {

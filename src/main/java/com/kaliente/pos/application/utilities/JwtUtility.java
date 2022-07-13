@@ -1,4 +1,4 @@
-package com.kaliente.pos.application.utils;
+package com.kaliente.pos.application.utilities;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,7 +20,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
-public class JwtUtil {
+public class JwtUtility {
 	private final String SECRET_KEY = "SECRET";
 	private final String AUTHORITIES_KEY = "scopes";
 	

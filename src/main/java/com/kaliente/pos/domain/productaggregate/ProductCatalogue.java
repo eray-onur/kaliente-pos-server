@@ -17,8 +17,8 @@ import org.hibernate.annotations.Where;
 @Setter
 @Entity(name="product_catalogues")
 @Table
-@SQLDelete(sql = "update product_catalogues set isActive = 0 where id =?")
-@Where(clause = "isActive = 1")
+@SQLDelete(sql = "update product_catalogues set is_active = false where id =?")
+@Where(clause = "is_active = true")
 public class ProductCatalogue extends BaseEntity {
 
 	@Column(unique=true)

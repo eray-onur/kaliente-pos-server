@@ -16,8 +16,8 @@ import javax.persistence.*;
 @Builder
 @Entity(name = "order_transactions")
 @Table
-@SQLDelete(sql = "update order_transactions set isActive = 0 where id =?")
-@Where(clause = "isActive = 1")
+@SQLDelete(sql = "update order_transactions set is_active = false where id =?")
+@Where(clause = "is_active = true")
 public class OrderTransaction extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
