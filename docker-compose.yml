@@ -1,9 +1,9 @@
 version: '3'
 services:
-  
   postgresdb:
     container_name: postgresdb
     image: postgres
+    restart: ""
     networks:
       - kaliente-network
     environment:
@@ -12,13 +12,13 @@ services:
     volumes:
       - kaliente-db-vol:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   kalientepos-webapi:
     container_name: kalientepos-webapi
     image: kalientepos/webapi
     ports:
-      - 8079:8079
+      - "8079:8079"
     networks:
       - kaliente-network
     environment:
