@@ -21,7 +21,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/kalientedb
     username: postgres
-    password: anan123
+    password: 8LQZjb0978U*
   # JPA properties
   jpa:
     properties:
@@ -50,6 +50,7 @@ server:
 app:
   mainCurrencyTitle: USD
 # External assets dir configuration
-assets:
-  productImagesPath: assets/productImages
-  personnelProfileImagesPath: assets/personnelProfileImages
+  assets:
+    absoluteRootPath: C:/Projects/KalientePOS/kaliente-pos-server/src/main/resources/static/public/
+    productImages: product_images
+    personnelProfileImages: personnel_profile_images

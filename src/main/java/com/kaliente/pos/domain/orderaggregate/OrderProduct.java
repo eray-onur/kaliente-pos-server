@@ -22,8 +22,8 @@ import java.util.UUID;
 @Builder
 @Entity(name = "order_products")
 @Table
-@SQLDelete(sql = "update order_products set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update order_products set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class OrderProduct extends BaseEntity {
 
     @Column(nullable = false, updatable = false)

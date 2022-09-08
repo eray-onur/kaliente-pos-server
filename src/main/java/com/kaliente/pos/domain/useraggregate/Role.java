@@ -23,8 +23,8 @@ import org.hibernate.annotations.Where;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql = "update roles set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update roles set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class Role extends BaseEntity {
 	
 

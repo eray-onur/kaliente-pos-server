@@ -16,8 +16,8 @@ import javax.persistence.*;
 @Builder
 @Entity(name = "order_customers")
 @Table
-@SQLDelete(sql = "update order_customers set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update order_customers set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class OrderCustomer extends BaseEntity {
     @Column
     private String firstName;

@@ -19,8 +19,8 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name="privileges")
-@SQLDelete(sql = "update privileges set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update privileges set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class Privilege extends BaseEntity {
 
 	@Column(unique=true)

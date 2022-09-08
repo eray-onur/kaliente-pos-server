@@ -2,6 +2,7 @@ package com.kaliente.pos.application.services;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.kaliente.pos.domain.productaggregate.ProductCatalogueRepository;
@@ -42,7 +43,9 @@ public class ProductCatalogueService {
 
     public ProductCatalogue createNewProductCatalogue(ProductCatalogueAddRequestDto dto) {
 
-        var parentCatalogue = productCatalogueRepository.findById(dto.getParentCatalogueId());
+        Optional<ProductCatalogue> parentCatalogue = (dto.getParentCatalogueId() != null)
+                ? productCatalogueRepository.findById(dto.getParentCatalogueId())
+                : Optional.empty();
 
         var productCatalogue = ProductCatalogue.builder()
                 .title(dto.getTitle())

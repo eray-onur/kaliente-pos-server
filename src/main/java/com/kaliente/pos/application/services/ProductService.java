@@ -9,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 
-import com.kaliente.pos.application.configs.AssetsFolderConfig;
+import com.kaliente.pos.application.configs.AppConfig;
 import com.kaliente.pos.domain.productaggregate.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ProductService {
 
-	private final AssetsFolderConfig assetsFolderConfig;
+	private final AppConfig appConfig;
 	private final ProductRepository productRepository;
 	private final ProductCatalogueRepository productCatalogueRepository;
 	private final CurrencyHistoryService currencyHistoryService;
@@ -32,12 +32,11 @@ public class ProductService {
 
 	@Autowired
 	public ProductService(
-			AssetsFolderConfig assetsFolderConfig,
 			ProductRepository productRepository,
 			ProductCatalogueRepository productCatalogueRepository,
 			CurrencyHistoryService currencyHistoryService,
-			ModelMapper modelMapper) {
-		this.assetsFolderConfig = assetsFolderConfig;
+			ModelMapper modelMapper, AppConfig appConfig) {
+		this.appConfig = appConfig;
 		this.productRepository = productRepository;
 		this.productCatalogueRepository = productCatalogueRepository;
 		this.currencyHistoryService = currencyHistoryService;
@@ -111,9 +110,11 @@ public class ProductService {
 	public void uploadImage(MultipartFile productImage, UUID productId) {
 		Optional<Product> productToUpdate = productRepository.findById(productId);
 
+		if(productToUpdate.isEmpty())
+			throw new RuntimeException("Failed to find product by given ID.");
+
 		try(InputStream inputStream = productImage.getInputStream()) {
-			String assetsPath = System.getProperty("user.dir");
-			Path uploadPath = Paths.get(assetsPath, assetsFolderConfig.getProductImagesPath());
+			Path uploadPath = Paths.get(appConfig.getAssets().getAbsoluteRootPath(), appConfig.getAssets().getProductImages());
 			String[] fileExtension = Objects.requireNonNull(productImage.getOriginalFilename()).split("\\.");
 
 			var storedImagePathname = String.valueOf(productId) + "." + fileExtension[fileExtension.length - 1];

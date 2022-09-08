@@ -1,6 +1,5 @@
 package com.kaliente.pos.domain.useraggregate;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -25,7 +24,7 @@ public interface UserRepository extends UserDetailsService, JpaRepository<User, 
 		}
 
 		return new org.springframework.security.core.userdetails.User(foundUser.getEmail(), foundUser.getPassword(),
-				foundUser.isActive(), true, true, true, getAuthority(foundUser));
+				!foundUser.isDeleted(), true, true, true, getAuthority(foundUser));
 	}
 
 	public default Set<SimpleGrantedAuthority> getAuthority(User foundUser) {

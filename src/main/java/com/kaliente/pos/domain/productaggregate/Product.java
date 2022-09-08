@@ -3,13 +3,11 @@ package com.kaliente.pos.domain.productaggregate;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kaliente.pos.domain.seedwork.AggregateRoot;
 import com.kaliente.pos.domain.seedwork.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,9 +16,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @Entity(name="products")
 @Table
-@SQLDelete(sql = "update products set is_active = false where id =?")
-@Where(clause = "is_active = true")
-//@EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "update products set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class Product extends BaseEntity implements AggregateRoot {
 	
 	@Column(unique=true)

@@ -14,7 +14,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where(clause = "is_active = true")
+@Where(clause = "is_deleted = false")
 public class CurrencyHistory extends BaseEntity {
     private String currencyTitle;
     private double baseCrossRate;

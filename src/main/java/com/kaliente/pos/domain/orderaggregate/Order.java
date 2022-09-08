@@ -16,8 +16,8 @@ import java.util.*;
 @Builder
 @Entity(name = "orders")
 @Table
-@SQLDelete(sql = "update orders set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update orders set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class Order extends BaseEntity implements AggregateRoot {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -97,6 +97,7 @@ public class Order extends BaseEntity implements AggregateRoot {
                     .build();
 
             paymentTransactions.add(backPayment);
+
         } else {
             setStatus(OrderStatus.COMPLETED);
         }

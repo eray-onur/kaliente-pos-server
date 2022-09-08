@@ -34,9 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/administration")
 public class AdministrationController {
 
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
-    private AdministrationService adminService;
+    private final AdministrationService adminService;
 
     @Autowired
     public AdministrationController(ModelMapper mapper, AdministrationService adminService) {

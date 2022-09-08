@@ -12,7 +12,7 @@ import java.util.UUID;
 public class OrderTransactionDto {
     private UUID orderTransactionId;
     private UUID belongingOrderId;
-    private TransactionMethod paymentMethod;
-    private OrderCurrency paymentCurrency;
+    private TransactionMethod transactionMethod;
+    private OrderCurrency transactionCurrency;
     private double paidAmount;
 }

@@ -2,6 +2,7 @@ package com.kaliente.pos.application.controllers;
 
 import java.util.List;
 
+import com.kaliente.pos.application.configs.AppConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +35,12 @@ import com.kaliente.pos.application.utilities.JwtUtility;
 @RequestMapping("/auth")
 public class AuthController {
 
-	private AuthenticationManager authManager;
+	private final AuthenticationManager authManager;
 
-	private JwtUtility jwtUtility;
+	private final JwtUtility jwtUtility;
 
-	private AuthService authService;
+	private final AuthService authService;
+
 
 	@Autowired
 	public AuthController(AuthenticationManager authManager, JwtUtility jwtUtility, AuthService authService) {
@@ -65,6 +67,7 @@ public class AuthController {
                         requestDto.getPassword()
                 )
         );
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 		final String jToken = jwtUtility.generateToken(authentication);
 

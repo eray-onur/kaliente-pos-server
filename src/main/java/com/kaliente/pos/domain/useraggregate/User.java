@@ -17,8 +17,8 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor
 @Builder
 @Entity(name = "users")
-@SQLDelete(sql = "update users set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update users set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class User  extends BaseEntity implements AggregateRoot {
 	
 	

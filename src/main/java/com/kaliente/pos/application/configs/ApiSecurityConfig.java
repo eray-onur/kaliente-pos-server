@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,12 +50,10 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 			.cors().and()
 			.authorizeRequests(authorizeRequests -> {
 				authorizeRequests
-		        .antMatchers("/auth/register", "/auth/authenticate", "/auth/health_check").permitAll()
+		        .antMatchers("/auth/register", "/auth/authenticate", "/auth/health_check", "/content/**").permitAll()
 		        .anyRequest().authenticated();
 			})
-			.csrf(csrf -> {
-				csrf.disable();
-			})
+			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		

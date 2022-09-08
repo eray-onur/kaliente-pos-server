@@ -10,12 +10,10 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Entity(name = "order_product_prices")
 @Table
-@SQLDelete(sql = "update order_product_prices set is_active = false where id =?")
-@Where(clause = "is_active = true")
+@SQLDelete(sql = "update order_product_prices set is_deleted = true where id =?")
+@Where(clause = "is_deleted = false")
 public class OrderProductPrice extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)

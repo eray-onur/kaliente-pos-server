@@ -13,15 +13,15 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
 
 
     @Override
-    @Query("select p from products p left join fetch p.catalogue where p.isActive = true")
+    @Query("select p from products p left join fetch p.catalogue where p.isDeleted = false")
     List<Product> findAll();
 
     @Override
-    @Query("select p from products p left join fetch p.catalogue where p.isActive = true and p.id = ?1")
+    @Query("select p from products p left join fetch p.catalogue where p.isDeleted = false and p.id = ?1")
     Optional<Product> findById(UUID id);
 
     @Modifying
-    @Query("update products p set isActive = false where p.id=?1")
+    @Query("update products p set isDeleted = true where p.id=?1")
     void deleteById(UUID id);
 
     @Modifying

@@ -176,6 +176,8 @@ public class OrderService {
                 throw new IllegalStateException("One transaction's currency title is not valid.");
 
             OrderTransaction transactionToAdd = modelMapper.map(transaction, OrderTransaction.class);
+            transactionToAdd.setPaidAmount(transaction.getPaidAmount());
+            transactionToAdd.setTransactionType(TransactionType.PAYMENT);
             transactionToAdd.setTransactionCurrency(
                     new OrderCurrency(
                             foundCurrency.get().getCurrencyTitle(),
@@ -195,15 +197,40 @@ public class OrderService {
                 .orderingDate(new Date())
                 .orderedBy(orderedBy)
                 .orderProducts(orderedProducts)
+                .paymentTransactions(transactions)
                 .build();
 
         // Total price calculation
-        orderToCreate.addNewTransactions(transactions);
+
+        // Total price of all the products.
+        double totalProductPrice = orderToCreate.getOrderProducts().stream().mapToDouble(
+                op -> (op.getCurrency().getCurrencyRate() == 1 // Checking if the given currency object is the main currency.
+                        ? op.getPrice()
+                        : op.getPrice() * op.getCurrency().getCurrencyRate()
+                        * op.getOrderedProductQuantity()
+                )
+        ).sum();
+
+        // Total cost for the order giver.
+        double paymentPrice = orderToCreate.getPaymentTransactions().stream()
+                .filter(pt -> pt.getTransactionType().equals(TransactionType.PAYMENT))
+                .mapToDouble(
+                        op -> (op.getTransactionCurrency().getCurrencyRate() == 1 // Checking if the given currency object is the main currency.
+                                ? op.getPaidAmount()
+                                : op.getPaidAmount() * op.getTransactionCurrency().getCurrencyRate())
+                ).sum();
         //
+
+        if(paymentPrice < totalProductPrice) {
+            throw new RuntimeException("Cannot create a full order. Insufficient payment.");
+        }
+
 
         orderToCreate.getOrderProducts().forEach(op -> op.setBelongingOrder(orderToCreate));
         orderToCreate.getPaymentTransactions().forEach(pt -> pt.setBelongingOrder(orderToCreate));
         orderToCreate.setOrderedBy(orderedBy);
+        orderToCreate.setCompletionDate(new Date());
+        orderToCreate.setStatus(OrderStatus.COMPLETED);
 
         return orderRepository.save(orderToCreate);
 
